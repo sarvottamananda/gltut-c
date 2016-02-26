@@ -4,21 +4,24 @@
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
+GLuint shader[2];
+GLuint program_id;
 
-    GLuint shader[2];
-    GLuint program_id;
-
-    GLuint vao;
-    GLuint vbo;
-
+GLuint vao;
+GLuint vbo;
+GLuint color_loc;
 
 static const GLfloat vbo_data[] = {
+    -0.5f, 0.0f, 0.1f,
+    0.5f, 0.0f, 0.1f,
+    0.0f, 0.5f, 0.1f,
     -0.5f, 0.0f, 0.0f,
-    0.5f, 0.0f, 0.0f,
-    0.0f, 0.5f, 0.0f,
+    +0.0, 0.5f, 0.0f,
+    0.0f, -0.5f, 0.0f
 };
 
-GLfloat color[4] = {0.5, 0.5, 0.0, 1.0};
+GLfloat color1[4] = { 0.0, 0.5, 0.0, 0.4 };
+GLfloat color2[4] = { 0.5, 0.0, 0.5, 0.0 };
 
 // The GLFW window with OpenGL context
 static GLFWwindow *window = NULL;
@@ -27,7 +30,6 @@ void error_callback(int error, const char *description)
 {
     fputs(description, stderr);
 }
-
 
 void glfw_stuff(void)
 {
@@ -72,11 +74,14 @@ void opengl_stuff(void)
     printf("Renderer: %s\n", renderer);
     printf("OpenGL version supported %s\n", version);
 
-    glClearColor(0.0f, 0.0f, 0.25f, 0.0f);	// Blue Background
+    glClearColor(0.0f, 0.0f, 0.0f, 0.0f);	// Blue Background
     glClearDepth(1.0f);		// Depth Buffer Setup
 
     glEnable(GL_DEPTH_TEST);	// Enables Depth Testing
     glDepthFunc(GL_LESS);	// The Type Of Depth Test To Do
+
+    glEnable(GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 }
 
@@ -222,11 +227,12 @@ GLuint create_program()
 	return 0;
     }
 
-	glDetachShader(progid, shader[0]);
-	glDetachShader(progid, shader[1]);
+    glDetachShader(progid, shader[0]);
+    glDetachShader(progid, shader[1]);
 
     return progid;
 }
+
 void shader_stuff(void)
 {
     GLuint vbo = 0;
@@ -260,20 +266,19 @@ void buffer_stuff(void)
 	);
     glEnableVertexAttribArray(0);
 
-
     glBindVertexArray(0);
 }
 
-void
-uniform_stuff(void)
+
+
+void uniform_stuff(void)
 {
-    
-    GLuint color_loc = glGetUniformLocation(program_id,"color");
+
+    color_loc = glGetUniformLocation(program_id, "color");
 
     //printf("Color loc : %d \n", color_loc);
 
     glUseProgram(program_id);
-    glUniform4fv(color_loc,1,color);
 }
 
 void opengl_draw_loop(void)
@@ -294,7 +299,13 @@ void opengl_draw_loop(void)
 
 	// Draw the triangle 1 !
 	glBindVertexArray(vao);
+        glUniform4fv(color_loc, 1, color1);
 	glDrawArrays(GL_TRIANGLES, 0, 3);	// Starting from vertex 0; 3 vertices total -> 1 triangle
+
+	glDepthMask(0);
+        glUniform4fv(color_loc, 1, color2);
+	glDrawArrays(GL_TRIANGLES, 3, 3);	// Starting from vertex 0; 3 vertices total -> 1 triangle
+	glDepthMask(1);
 
 	// Swap buffers
 	glfwSwapBuffers(window);
@@ -304,17 +315,14 @@ void opengl_draw_loop(void)
 	   glfwWindowShouldClose(window) == 0);
 }
 
-int
-main(int argc, char **argv)
+int main(int argc, char **argv)
 {
     glfw_stuff();
     opengl_stuff();
     shader_stuff();
-
 
     buffer_stuff();
     uniform_stuff();
 
     opengl_draw_loop();
 }
-

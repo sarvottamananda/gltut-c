@@ -7,4 +7,5 @@ uniform vec4 color;
 void main()
 {
 	fcolor = color;
+	fcolor.a = 0.5;
 }

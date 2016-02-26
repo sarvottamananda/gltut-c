@@ -27,6 +27,9 @@ int opengl_init(void)
     glEnable(GL_DEPTH_TEST);	// Enables Depth Testing
     glDepthFunc(GL_LESS);	// The Type Of Depth Test To Do
 
+    glEnable(GL_BLEND);
+    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     glPointSize(4);
 }
 
