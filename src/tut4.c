@@ -459,7 +459,7 @@ void settextures(void)
     struct image_st image_grass;
     int width = 0;
     int height = 0;
-    int num_mipmaps = 1;
+    int num_mipmaps = 8;
     void *gpixels, *tpixels;
 
     png_read_file("textures/grass2.png", &image_grass);
