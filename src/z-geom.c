@@ -28,7 +28,8 @@ static struct geom_model_st * create_geom_st(void)
 }
 
 
-static const char * vsep = "/";
+static const char * vsep = " ";
+static const char * fsep = "/";
 
 
 static void geom_set_v(struct geom_model_st * g, int vcnt, float v[][4])
@@ -94,7 +95,7 @@ static void geom_set_max(struct geom_model_st * g, float xmax, float ymax, float
     g->max[2] = zmax;
 }
 
-static void geom_set_faces(struct geom_model_st *g, int f, char **fstr)
+static void geom_set_faces(struct geom_model_st *g, int fcnt, char **fstr)
 {
     g->f_cnt = fcnt;
 
@@ -103,31 +104,39 @@ static void geom_set_faces(struct geom_model_st *g, int f, char **fstr)
     g->fvt = (int **)malloc(sizeof(int *)  * fcnt);
     g->fvn = (int **)malloc(sizeof(int *)  * fcnt);
 
-    if( (g->v==NULL) || (g->vt==NULL) || (g->vn==NULL) 
-	    || (g->fn==NULL) || (g->fv==NULL) || (g->fvt==NULL) || (g->fvn==NULL) ) {
-	perror("Cannot allocate memory for some of v, vt, vn, fv, fvt, fvn");
+    if((g->fn==NULL) || (g->fv==NULL) || (g->fvt==NULL) || (g->fvn==NULL) ) {
+	perror("Cannot allocate memory for some of fn, fv, fvt, fvn");
 	exit(1);
     }
 
-    g->fn[f] = 1;
-    g->fv[f] = (int *)malloc(sizeof(int)); 
-    g->fvt[f] = (int *)malloc(sizeof(int)); 
-    g->fvn[f] = (int *)malloc(sizeof(int)); 
+    for(int i=0;i < fcnt; i++){
+        char * vstr = strdup(fstr[i]);
+        char * token = NULL;
 
-    if (( g->fv[f] == NULL)
-	    ||( g->fv[f] == NULL)
-	    ||( g->fv[f] == NULL)){
-	perror("Cannot allocate memory for some of fv[f], fvt[f], fvn[f]");
-	exit(1);
+        token = strtok(vstr,":");
+        int nv = atoi(token);
+
+        g->fn[i]  = nv;
+        g->fv[i] = (int *)malloc(sizeof(int) * nv); 
+        g->fvt[i] = (int *)malloc(sizeof(int) * nv); 
+        g->fvn[i] = (int *)malloc(sizeof(int) * nv); 
+
+        if (( g->fv[i] == NULL)
+                ||( g->fv[i] == NULL)
+                ||( g->fv[i] == NULL)){
+            perror("Cannot allocate memory for some of fv[i], fvt[i], fvn[i]");
+            exit(1);
+        }
+
+        for(int j = 0; j < nv; j++){
+            token = strtok(NULL,vsep);
+            g->fv[i][j] = atoi(token);
+            token = strtok(NULL,fsep);
+            g->fvt[i][j] = atoi(token);
+            token = strtok(NULL,fsep);
+            g->fvn[i][j] = atoi(token);
+        }
     }
-    char * token;
-
-    token = strtok(vstr,vsep);
-    g->fv[f][0] = atoi(token);
-    token = strtok(NULL,vsep);
-    g->fvt[f][0] = atoi(token);
-    token = strtok(NULL,vsep);
-    g->fvn[f][0] = atoi(token);
 }
 
 struct geom_model_st * geom_make_cube(void)
@@ -151,21 +160,21 @@ struct geom_model_st * geom_make_cube(void)
     };
 
     float vn[][3] = {
-	{1.0, 0.0, 0.0},
 	{-1.0, 0.0, 0.0},
-	{0.0, 1.0, 0.0},
+	{1.0, 0.0, 0.0},
 	{0.0, -1.0, 0.0},
+	{0.0, 1.0, 0.0},
+	{0.0, 0.0, -1.0},
 	{0.0, 0.0, 1.0},
-	{0.0, 0.0, -1.0}
     };
 
     char * finf[] = {
-	"0 2 3 1",
-	"4 5 7 6",
-	"0 4 5 1",
-	"2 6 7 3",
-	"0 2 6 4",
-	"1 3 7 5"
+	"4:0/0/4 2/2/4 3/3/4 1/1/4",
+	"4:4/0/5 5/2/5 7/3/5 6/1/5",
+	"4:0/0/2 1/2/2 5/3/2 4/1/2",
+	"4:3/0/3 2/2/3 6/3/3 7/1/3",
+	"4:2/0/0 0/2/0 4/3/0 6/1/0",
+	"4:1/0/1 3/2/1 7/3/1 5/1/1"
     };
 
     struct geom_model_st * cube;

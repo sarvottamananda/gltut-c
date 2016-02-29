@@ -8,16 +8,20 @@ enum model_enum { MODEL_NONE, MODEL_POINT, MODEL_CUBE, MODEL_SQUARE,
 };
 
 struct model_st {
-    GLint id;
+    unsigned int id;
     char *name;
 
     GLint vbo_offset;
     GLint draw_mode;
 
     GLint vcount;
-    GLfloat *vertices;
-    GLfloat *normals;
-    GLfloat *tcoords;
+
+    struct vbuf_st{
+        GLfloat[4] v;
+        GLfloat[3] vt;
+        GLfloat[3] vn;
+    } * vbuf;
+
     struct texture_st *tex;
 };
 
