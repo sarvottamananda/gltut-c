@@ -66,8 +66,7 @@ void character_callback(GLFWwindow * window, unsigned int codepoint)
 {
 }
 
-void charmods_callback(GLFWwindow * window, unsigned int codepoint,
-		       int mods)
+void charmods_callback(GLFWwindow * window, unsigned int codepoint, int mods)
 {
 }
 
@@ -114,11 +113,16 @@ int glfw_init(int width, int height, int fullscreen)
 
     glfwSetErrorCallback(error_callback);
 
-    glfwWindowHint(GLFW_SAMPLES, 4);	// 4x antialiasing
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);	// We want OpenGL 3.3
+    // 4x antialiasing
+    glfwWindowHint(GLFW_SAMPLES, 4);
+    // We want OpenGL 3.3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);	// To make MacOS happy; should not be needed
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);	//We don't want the old OpenGL
+    // To make MacOS happy; should not be needed
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    // We don't want the old OpenGL
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     glfwWindowHint(GLFW_DEPTH_BITS, 32);
 
     GLFWmonitor *pmonitor = glfwGetPrimaryMonitor();
@@ -152,16 +156,14 @@ int glfw_init(int width, int height, int fullscreen)
 	else
 	    height = (height < 360 ? 360 : height);
 
-	window =
-	    glfwCreateWindow(width, height, "Autoworld", pmonitor, NULL);
+	window = glfwCreateWindow(width, height, "Autoworld", pmonitor, NULL);
 
 	const GLFWvidmode *pvidmode = glfwGetVideoMode(pmonitor);
 	printf("Current Width %d, Height %d, RGB:(%d:%d:%d), Rate:%dHz\n",
 	       pvidmode->width,
 	       pvidmode->height,
 	       pvidmode->redBits,
-	       pvidmode->greenBits, pvidmode->blueBits,
-	       pvidmode->refreshRate);
+	       pvidmode->greenBits, pvidmode->blueBits, pvidmode->refreshRate);
 
     } else {
 	if (width == 0)
@@ -213,7 +215,8 @@ int glfw_finish()
 
 void glfw_loop()
 {
-    // Ensure we can capture the keys and mouse button being pressed and released before polling
+    // Ensure we can capture the keys and mouse button being pressed and
+    // released before polling
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
     glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 1);
 
@@ -228,7 +231,8 @@ void glfw_loop()
 	// Swap buffers
 	glfwSwapBuffers(window);
 	glfwPollEvents();
-    }				// Check if the ESC key was pressed or the window was closed
+    }				       // Check if the ESC key was pressed or the
+    // window was closed
     while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
 	   glfwWindowShouldClose(window) == 0);
 }

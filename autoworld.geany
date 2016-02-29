@@ -28,7 +28,7 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=6
+current_page=7
 FILE_NAME_0=0;GLSL;0;EUTF-8;1;1;0;%2Fhome%2Fshreesh%2Fprojects%2Fautoworld%2Fsrc%2Fshaders%2Ftut2.frag;0;4
 FILE_NAME_1=0;GLSL;0;EUTF-8;1;1;0;%2Fhome%2Fshreesh%2Fprojects%2Fautoworld%2Fsrc%2Fshaders%2Ftut2.vert;0;4
 FILE_NAME_2=0;GLSL;0;EUTF-8;1;1;0;%2Fhome%2Fshreesh%2Fprojects%2Fautoworld%2Fsrc%2Fshaders%2Ftut3.frag;0;4
@@ -36,6 +36,7 @@ FILE_NAME_3=0;GLSL;0;EUTF-8;1;1;0;%2Fhome%2Fshreesh%2Fprojects%2Fautoworld%2Fsrc
 FILE_NAME_4=0;GLSL;0;EUTF-8;1;1;0;%2Fhome%2Fshreesh%2Fprojects%2Fautoworld%2Fsrc%2Fshaders%2Ftut4-plain.frag;0;4
 FILE_NAME_5=0;GLSL;0;EUTF-8;1;1;0;%2Fhome%2Fshreesh%2Fprojects%2Fautoworld%2Fsrc%2Fshaders%2Ftut4-plain.vert;0;4
 FILE_NAME_6=0;GLSL;0;EUTF-8;1;1;0;%2Fhome%2Fshreesh%2Fprojects%2Fautoworld%2Fsrc%2Fshaders%2Ftut4-texture.frag;0;4
+FILE_NAME_7=1226;C;0;EUTF-8;1;1;0;%2Fhome%2Fshreesh%2Fprojects%2Fautoworld%2Fsrc%2Ftut0.c;0;4
 
 [VTE]
 last_dir=/home/shreesh

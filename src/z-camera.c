@@ -25,7 +25,7 @@ struct scene_st *camera_create_scene(void)
 {
     struct scene_st *tmp;
 
-    tmp = (struct scene_st *) malloc(sizeof(struct scene_st));
+    tmp = (struct scene_st *)malloc(sizeof(struct scene_st));
     if (tmp == NULL) {
 	perror("Cannot allocate memory for scene_st");
     }
@@ -133,14 +133,12 @@ void camera_reset(struct scene_st *sc)
     GLfloat right[3];
     GLfloat target[3];
 
-    sub_vec3(target, sc->sceneblk.camera_target,
-	     sc->sceneblk.camera_position);
+    sub_vec3(target, sc->sceneblk.camera_target, sc->sceneblk.camera_position);
     cross_vec3(right, target, sc->sceneblk.camera_up);
     cross_vec3(front, sc->sceneblk.camera_up, right);
     normalize_vec3(front);
 
-    add_vec3(sc->sceneblk.camera_target, sc->sceneblk.camera_position,
-	     front);
+    add_vec3(sc->sceneblk.camera_target, sc->sceneblk.camera_position, front);
 }
 
 void calculate_proj_mat4(struct scene_st *sc)
@@ -155,6 +153,5 @@ void calculate_view_mat4(struct scene_st *sc)
 {
     pvm_calculate_view_mat4(sc->sceneblk.viewmat,
 			    sc->sceneblk.camera_position,
-			    sc->sceneblk.camera_target,
-			    sc->sceneblk.camera_up);
+			    sc->sceneblk.camera_target, sc->sceneblk.camera_up);
 }

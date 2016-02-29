@@ -40,12 +40,16 @@ void glfw_stuff(void)
     }
 
     glfwSetErrorCallback(error_callback);
-
-    glfwWindowHint(GLFW_SAMPLES, 4);	// 4x antialiasing
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);	// We want OpenGL 3.3
+    // 4x antialiasing
+    glfwWindowHint(GLFW_SAMPLES, 4);
+    // We want OpenGL 3.3
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);	// To make MacOS happy; should not be needed
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);	//We don't want the old OpenGL
+    // To make MacOS happy; should not be needed
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+    // We don't want the old OpenGL
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+
     glfwWindowHint(GLFW_DEPTH_BITS, 32);
 
     window = glfwCreateWindow(800, 600, "Tutorial 0", NULL, NULL);
@@ -63,22 +67,25 @@ void glfw_stuff(void)
 void opengl_stuff(void)
 {
     // Initialize GLEW
-    glewExperimental = 1;	// Needed in core profile
+    glewExperimental = 1;	       // Needed in core profile
     if (glewInit() != GLEW_OK) {
 	fprintf(stderr, "Failed to initialize GLEW\n");
 	exit(1);
     }
     // get version info
-    const GLubyte *renderer = glGetString(GL_RENDERER);	// get renderer string
-    const GLubyte *version = glGetString(GL_VERSION);	// version as a string
+    // get renderer string
+    const GLubyte *renderer = glGetString(GL_RENDERER);
+    // version as a  string
+    const GLubyte *version = glGetString(GL_VERSION);
+
     printf("Renderer: %s\n", renderer);
     printf("OpenGL version supported %s\n", version);
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);	// Blue Background
-    glClearDepth(1.0f);		// Depth Buffer Setup
+    glClearDepth(1.0f);		       // Depth Buffer Setup
 
-    glEnable(GL_DEPTH_TEST);	// Enables Depth Testing
-    glDepthFunc(GL_LESS);	// The Type Of Depth Test To Do
+    glEnable(GL_DEPTH_TEST);	       // Enables Depth Testing
+    glDepthFunc(GL_LESS);	       // The Type Of Depth Test To Do
 
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -146,11 +153,12 @@ GLuint compile_shader(GLenum type, const char *shaderfile)
 
     GLchar *shaderbuf = readfile(shaderfile);
 
-    // The shader source code itself is loaded to the shader object using glShaderSource.
-    // The shader is then compiled using the glCompileShader function.
+    // The shader source code itself is loaded to the shader object using
+    // glShaderSource. The shader is then compiled using the glCompileShader
+    // function.
 
     // Load the shader source
-    glShaderSource(shader, 1, (const GLchar const **) &shaderbuf, NULL);
+    glShaderSource(shader, 1, (const GLchar const **)&shaderbuf, NULL);
 
     // Compile the shader
     glCompileShader(shader);
@@ -196,8 +204,9 @@ GLuint create_program()
     glAttachShader(progid, shader[0]);
     glAttachShader(progid, shader[1]);
 
-    // Once the shaders have been attached, the next step the sample application does is to
-    // set the location for the vertex shader attribute vPosition:
+    // Once the shaders have been attached, the next step the sample
+    // application does is to set the location for the vertex shader
+    // attribute vPosition:
 
     // Finally, we are ready to link the program and check for errors:
 
@@ -255,29 +264,26 @@ void buffer_stuff(void)
     // The following commands will talk about our 'vbid' buffer
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     // Give our vertices to OpenGL.
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vbo_data), vbo_data,
-		 GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vbo_data), vbo_data, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0,	// attribute location
-			  3,	// size
-			  GL_FLOAT,	// type
-			  GL_FALSE,	// normalized?
-			  0,	// stride
-			  (void *) 0	// array buffer offset
+    glVertexAttribPointer(0,	       // attribute location
+			  3,	       // size
+			  GL_FLOAT,    // type
+			  GL_FALSE,    // normalized?
+			  0,	       // stride
+			  (void *)0    // array buffer offset
 	);
     glEnableVertexAttribArray(0);
 
     glBindVertexArray(0);
 }
 
-
-
 void uniform_stuff(void)
 {
 
     color_loc = glGetUniformLocation(program_id, "color");
 
-    //printf("Color loc : %d \n", color_loc);
+    // printf("Color loc : %d \n", color_loc);
 
     glUseProgram(program_id);
 }
@@ -285,7 +291,8 @@ void uniform_stuff(void)
 void opengl_draw_loop(void)
 {
 
-    // Ensure we can capture the keys and mouse button being pressed and released before polling
+    // Ensure we can capture the keys and mouse button being pressed and
+    // released before polling
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
     glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 1);
 
@@ -301,17 +308,20 @@ void opengl_draw_loop(void)
 	// Draw the triangle 1 !
 	glBindVertexArray(vao);
 	glUniform4fv(color_loc, 1, color1);
-	glDrawArrays(GL_TRIANGLES, 0, 3);	// Starting from vertex 0; 3 vertices total -> 1 triangle
+	// Starting from vertex 0; 3 vertices total -> 1 triangle
+	glDrawArrays(GL_TRIANGLES, 0, 3);
 
 	glDepthMask(0);
 	glUniform4fv(color_loc, 1, color2);
-	glDrawArrays(GL_TRIANGLES, 3, 3);	// Starting from vertex 0; 3 vertices total -> 1 triangle
+	// Starting from vertex 0; 3 vertices total -> 1 triangle
+	glDrawArrays(GL_TRIANGLES, 3, 3);
 	glDepthMask(1);
 
 	// Swap buffers
 	glfwSwapBuffers(window);
 	glfwPollEvents();
-    }				// Check if the ESC key was pressed or the window was closed
+    }
+    // Check if the ESC key was pressed or the window was closed
     while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
 	   glfwWindowShouldClose(window) == 0);
 }

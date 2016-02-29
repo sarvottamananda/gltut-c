@@ -1,6 +1,7 @@
 #ifndef Z_MODELS_H_INCLUDED
 #define Z_MODELS_H_INCLUDED
 
+#include "z-geom.h"
 #include "z-list.h"
 
 enum model_enum { MODEL_NONE, MODEL_POINT, MODEL_CUBE, MODEL_SQUARE,
@@ -12,7 +13,12 @@ struct model_st {
     char *name;
 
     GLint vbo_offset;
+    GLint *vbo_start;
+
     GLint draw_mode;
+    GLint *start;
+    GLint *count;
+    GLint num;
 
     unsigned int vcount;
 
@@ -22,19 +28,25 @@ struct model_st {
 	GLfloat vn[3];
     } *vbuf;
 
-    struct texture_st *tex;
 };
 
 extern void mdl_set_vbo_offset(struct model_st *, GLint);
+extern void mdl_set_vbo_start(struct model_st *model, GLint offset);
 extern GLint mdl_get_vbo_offset(struct model_st *);
 
 extern struct model_st *mdl_get_std_model(int);
-extern struct model_st *mdl_new_model(int);
-extern void mdl_delete_model(struct model_st *);
 
-extern struct model_st *mdl_create_square_model(int, int, GLfloat, GLfloat,
-						GLfloat, GLfloat);
+extern struct model_st *mdl_create_checker_with_triangles(int, int, GLfloat,
+							  GLfloat, GLfloat,
+							  GLfloat);
+extern struct model_st *mdl_create_checker_with_strips(int xnum, int ynum,
+						       GLfloat lx, GLfloat by,
+						       GLfloat rx, GLfloat ty);
+extern struct model_st *mdl_create_model_from_geom(char *name, struct geom_model_st
+						   *geom);
 
-void mdl_init(void);
+extern void mdl_init(void);
+
+extern void mdl_print(struct model_st *mdl);
 
 #endif

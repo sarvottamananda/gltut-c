@@ -128,8 +128,8 @@ void mtr_init(void)
     color_init();
 
     std_material =
-	(struct material_st *) malloc(sizeof(struct material_st) *
-				      num_std_materials);
+	(struct material_st *)malloc(sizeof(struct material_st) *
+				     num_std_materials);
     if (std_material == NULL) {
 	perror("Cannot allocate memory for std_material.\n");
 	exit(EXIT_FAILURE);
@@ -255,7 +255,7 @@ struct material_st *mtr_new_material(int num)
 {
     struct material_st *tmp;
 
-    tmp = (struct material_st *) malloc(sizeof(struct material_st) * num);
+    tmp = (struct material_st *)malloc(sizeof(struct material_st) * num);
     if (tmp == NULL) {
 	perror("Cannot allocate memory for std_material.\n");
 	exit(EXIT_FAILURE);
@@ -272,18 +272,61 @@ void mtr_delete_material(struct material_st *m)
     free(m);
 }
 
+void mtr_set_name(struct material_st *m, char *name)
+{
+    m->name = strdup(name);
+}
+
 void mtr_set_texcoords(struct material_st *m, GLfloat ox, GLfloat oy,
 		       GLfloat sx, GLfloat sy)
 {
 
-    //m->matblk.dummy_1[0] = 1.0;
-    //m->matblk.dummy_1[1] = 0.0;
+    // m->matblk.dummy_1[0] = 1.0;
+    // m->matblk.dummy_1[1] = 0.0;
     m->matblk.texorigin[0] = ox;
     m->matblk.texorigin[1] = oy;
-    //m->matblk.texorigin[0] = 0.0;
-    //m->matblk.texorigin[1] = 0.0;
+    // m->matblk.texorigin[0] = 0.0;
+    // m->matblk.texorigin[1] = 0.0;
     m->matblk.texsize[0] = sx;
     m->matblk.texsize[1] = sy;
-    //m->matblk.texsize[0] = 1.0;
-    //m->matblk.texsize[1] = 0.0;
+    // m->matblk.texsize[0] = 1.0;
+    // m->matblk.texsize[1] = 0.0;
+}
+
+void mtr_print(struct material_st *mat)
+{
+    printf("Material: %s [%d]\n", mat->name, mat->id);
+    printf("\tAmbient: ");
+    for (int i = 0; i < 4; i++)
+	printf("%f ", mat->matblk.ambient[i]);
+    printf("\n");
+    printf("\tDiffuse: ");
+    for (int i = 0; i < 4; i++)
+	printf("%f ", mat->matblk.diffuse[i]);
+    printf("\n");
+    printf("\tSpecular: ");
+    for (int i = 0; i < 4; i++)
+	printf("%f ", mat->matblk.specular[i]);
+    printf("\n");
+    printf("\tShininess: ");
+    printf("%f ", mat->matblk.shininess);
+    printf("\n");
+    printf("\tTex origin: ");
+    for (int i = 0; i < 2; i++)
+	printf("%f ", mat->matblk.texorigin[i]);
+    printf("\n");
+    printf("\tTex size: ");
+    for (int i = 0; i < 2; i++)
+	printf("%f ", mat->matblk.texsize[i]);
+    printf("\n");
+    printf("\tMatblk offset: ");
+    printf("%d ", mat->matblk_offset);
+    printf("\tMatblk size: ");
+    printf("%d ", mat->matblk_size);
+    if (mat->tex != NULL) {
+	printf("\tTexture: ");
+	printf("%s [%d] ", mat->tex->name, mat->tex->id);
+	printf("\n");
+    } else
+	printf("\tTexture: Nil\n");
 }

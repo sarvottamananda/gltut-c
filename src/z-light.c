@@ -8,7 +8,7 @@ struct light_st *light_create_light(void)
 {
     struct light_st *tmp;
 
-    tmp = (struct light_st *) malloc(sizeof(struct light_st));
+    tmp = (struct light_st *)malloc(sizeof(struct light_st));
     if (tmp == NULL) {
 	perror("Cannot allocate memory for light_st");
     }
@@ -26,8 +26,7 @@ void light_set_ambience(struct light_st *lt, GLfloat a[3])
     copy_vec3(lt->lightblk.ambience, a);
 }
 
-void light_set_light(struct light_st *lt, int n, GLfloat lp[3],
-		     GLfloat e[3])
+void light_set_light(struct light_st *lt, int n, GLfloat lp[3], GLfloat e[3])
 {
     if (lt->lightblk.num < n + 1)
 	lt->lightblk.num = n + 1;

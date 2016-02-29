@@ -15,6 +15,12 @@ COMMON_FILES = a-defs.h \
 	a-main.c \
 	z-main.h 
 
+PROGRAM_FILES = tut0.c tut1.c tut2.c tut3.c tut4.c tut5.c
+
+indent: $(COMMON_FILES) $(PROGRAM_FILES)
+	@echo "Indenting all source and header files"
+	indent -linux -i4 -l80 -c40 -cd40 -cp33 $?
+
 bin_PROGRAMS = tut0 tut1 tut2 tut3 tut4 tut5
 
 tut0_SOURCES = tut0.c
@@ -33,4 +39,3 @@ tut4_SOURCES = $(COMMON_FILES) \
 
 tut5_SOURCES = $(COMMON_FILES) \
 	tut5.c
-

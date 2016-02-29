@@ -28,8 +28,7 @@ struct object_st {
 
 extern void world_init(GLfloat, GLfloat, GLfloat);
 
-extern void obj_abs_translate(struct object_st *, GLfloat, GLfloat,
-			      GLfloat);
+extern void obj_abs_translate(struct object_st *, GLfloat, GLfloat, GLfloat);
 extern void obj_abs_scale(struct object_st *, GLfloat, GLfloat, GLfloat);
 extern void obj_abs_rotate(struct object_st *, GLfloat, GLfloat, GLfloat,
 			   GLfloat);
@@ -43,5 +42,7 @@ extern void calculate_normal_mat4(struct object_st *);
 
 extern struct object_st *obj_create_object(char *, struct model_st *,
 					   struct material_st *);
+
+extern void obj_print(struct object_st *obj);
 
 #endif

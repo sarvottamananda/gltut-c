@@ -173,8 +173,7 @@ void setshaders(void)
     GLuint shader[3];
 
     shader[0] = opengl_createshader(GL_VERTEX_SHADER, "shaders/tut2.vert");
-    shader[1] =
-	opengl_createshader(GL_FRAGMENT_SHADER, "shaders/tut2.frag");
+    shader[1] = opengl_createshader(GL_FRAGMENT_SHADER, "shaders/tut2.frag");
     shader[2] = 0;
 
     GLuint shlist[] = { 0, 1, -1 };
@@ -186,7 +185,7 @@ void setvaos(void)
 {
     GLuint vbo = 0;
 
-    //vposition_loc = 0;
+    // vposition_loc = 0;
     position_loc = glGetAttribLocation(progid, "position");
     texcoord_loc = glGetAttribLocation(progid, "texcoord");
     normal_loc = glGetAttribLocation(progid, "normal");
@@ -211,12 +210,11 @@ void setvaos(void)
 		    sizeof(vertices) + sizeof(texcoords), sizeof(normals),
 		    normals);
 
-    glVertexAttribPointer(position_loc, 4, GL_FLOAT, GL_FALSE, 0,
-			  (void *) 0);
+    glVertexAttribPointer(position_loc, 4, GL_FLOAT, GL_FALSE, 0, (void *)0);
     glVertexAttribPointer(texcoord_loc, 2, GL_FLOAT, GL_FALSE, 0,
-			  (void *) (sizeof(vertices)));
+			  (void *)(sizeof(vertices)));
     glVertexAttribPointer(normal_loc, 3, GL_FLOAT, GL_FALSE, 0,
-			  (void *) (sizeof(vertices) + sizeof(texcoords)));
+			  (void *)(sizeof(vertices) + sizeof(texcoords)));
 
     if (position_loc >= 0)
 	glEnableVertexAttribArray(position_loc);
@@ -262,15 +260,13 @@ void setuniforms(void)
     ubo_light = ubo[3];
 
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_model);
-    glBufferData(GL_UNIFORM_BUFFER, sizeof(model_mat4), NULL,
-		 GL_DYNAMIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(model_mat4), NULL, GL_DYNAMIC_DRAW);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(model_mat4), model_mat4);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_scene);
     glBufferData(GL_UNIFORM_BUFFER,
-		 sizeof(view_mat4) + sizeof(proj_mat4), NULL,
-		 GL_DYNAMIC_DRAW);
+		 sizeof(view_mat4) + sizeof(proj_mat4), NULL, GL_DYNAMIC_DRAW);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(view_mat4), view_mat4);
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(view_mat4),
 		    sizeof(proj_mat4), proj_mat4);
@@ -284,14 +280,11 @@ void setuniforms(void)
     int off = 0;
     glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(color_vec), color_vec);
     off += sizeof(color_vec);
-    glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(ambient_vec),
-		    ambient_vec);
+    glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(ambient_vec), ambient_vec);
     off += sizeof(ambient_vec);
-    glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(diffuse_vec),
-		    diffuse_vec);
+    glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(diffuse_vec), diffuse_vec);
     off += sizeof(diffuse_vec);
-    glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(specular_vec),
-		    specular_vec);
+    glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(specular_vec), specular_vec);
     off += sizeof(specular_vec);
     glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(shininess_float),
 		    &shininess_float);
@@ -301,8 +294,7 @@ void setuniforms(void)
     glBufferData(GL_UNIFORM_BUFFER,
 		 sizeof(light_pos_vec) + sizeof(light_color_vec),
 		 NULL, GL_DYNAMIC_DRAW);
-    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(light_pos_vec), 0,
-		    light_pos_vec);
+    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(light_pos_vec), 0, light_pos_vec);
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(light_color_vec),
 		    sizeof(light_pos_vec), light_color_vec);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -367,9 +359,9 @@ void main_draw(void)
     // Draw the triangle 1 !
     glBindVertexArray(vao[0]);
 
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
-    //glDrawArrays(GL_TRIANGLES, 12, 6);
-    //glDrawArrays(GL_TRIANGLES, 24, 6);
+    // glDrawArrays(GL_TRIANGLES, 0, 6);
+    // glDrawArrays(GL_TRIANGLES, 12, 6);
+    // glDrawArrays(GL_TRIANGLES, 24, 6);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 
     glBindVertexArray(0);

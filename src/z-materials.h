@@ -1,6 +1,8 @@
 #ifndef Z_MATERIALS_H_INCLUDED
 #define Z_MATERIALS_H_INCLUDED
 
+#include "z-tex.h"
+
 enum material_enum {
     MATERIAL_NONE, MATERIAL_WHITE, MATERIAL_BLACK,
     MATERIAL_RED, MATERIAL_GREEN, MATERIAL_BLUE,
@@ -67,7 +69,10 @@ extern struct material_st *mtr_new_material(int);
 extern void mtr_delete_material(struct material_st *);
 extern void mtr_set_texcoords(struct material_st *, GLfloat, GLfloat,
 			      GLfloat, GLfloat);
+extern void mtr_set_name(struct material_st *m, char *name);
 
-void mtr_init(void);
+extern void mtr_init(void);
+
+extern void mtr_print(struct material_st *mat);
 
 #endif

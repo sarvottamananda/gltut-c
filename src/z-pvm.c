@@ -65,8 +65,7 @@ void set_rotate_mat4(GLfloat mat[][4], GLfloat v[3], GLfloat alpha)
 }
 
 void pvm_calculate_model_mat4(GLfloat res[][4], GLfloat tr[3],
-			      GLfloat sc[3],
-			      GLfloat rot[3], GLfloat rot_ang)
+			      GLfloat sc[3], GLfloat rot[3], GLfloat rot_ang)
 {
     GLfloat scale[4][4];
     GLfloat translate[4][4];
@@ -83,8 +82,7 @@ void pvm_calculate_model_mat4(GLfloat res[][4], GLfloat tr[3],
 }
 
 void pvm_calculate_view_mat4(GLfloat res[][4],
-			     GLfloat cpos[3], GLfloat ctgt[3],
-			     GLfloat up[3])
+			     GLfloat cpos[3], GLfloat ctgt[3], GLfloat up[3])
 {
     GLfloat zaxis[3];
     GLfloat yaxis[3];
@@ -100,9 +98,9 @@ void pvm_calculate_view_mat4(GLfloat res[][4],
     // Not needed
     // normalize_vec3(yaxis);
 
-    //print_vec3("zaxis",zaxis);
-    //print_vec3("xaxis",xaxis);
-    //print_vec3("yaxis",yaxis);
+    // print_vec3("zaxis",zaxis);
+    // print_vec3("xaxis",xaxis);
+    // print_vec3("yaxis",yaxis);
 
     res[0][0] = xaxis[0];
     res[1][0] = xaxis[1];
