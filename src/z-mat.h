@@ -21,9 +21,9 @@ extern void set_identity_mat4(GLfloat[][4]);
 extern void zero_vec3(GLfloat v[]);
 extern void unit_vec3(GLfloat v[]);
 
-extern void set_vec2(GLfloat, GLfloat, GLfloat v[]);
-extern void set_vec3(GLfloat, GLfloat, GLfloat, GLfloat v[]);
-extern void set_vec4(GLfloat, GLfloat, GLfloat, GLfloat, GLfloat v[]);
+extern void set_vec2(GLfloat[], GLfloat, GLfloat);
+extern void set_vec3(GLfloat[], GLfloat, GLfloat, GLfloat);
+extern void set_vec4(GLfloat[], GLfloat, GLfloat, GLfloat, GLfloat);
 
 extern void copy_vec2(GLfloat[2], GLfloat[]);
 extern void copy_vec3(GLfloat[3], GLfloat[]);

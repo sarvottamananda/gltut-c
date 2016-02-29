@@ -66,7 +66,8 @@ void character_callback(GLFWwindow * window, unsigned int codepoint)
 {
 }
 
-void charmods_callback(GLFWwindow * window, unsigned int codepoint, int mods)
+void charmods_callback(GLFWwindow * window, unsigned int codepoint,
+		       int mods)
 {
 }
 
@@ -151,7 +152,8 @@ int glfw_init(int width, int height, int fullscreen)
 	else
 	    height = (height < 360 ? 360 : height);
 
-	window = glfwCreateWindow(width, height, "Autoworld", pmonitor, NULL);
+	window =
+	    glfwCreateWindow(width, height, "Autoworld", pmonitor, NULL);
 
 	const GLFWvidmode *pvidmode = glfwGetVideoMode(pmonitor);
 	printf("Current Width %d, Height %d, RGB:(%d:%d:%d), Rate:%dHz\n",

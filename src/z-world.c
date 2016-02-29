@@ -44,7 +44,7 @@ struct object_st *obj_create_object(char *name,
 {
     struct object_st *tmp;
 
-    tmp = (struct object_st *)malloc(sizeof(struct object_st));
+    tmp = (struct object_st *) malloc(sizeof(struct object_st));
     if (tmp == NULL) {
 	perror("Cannot allocalte memory in create_object");
 	exit(EXIT_FAILURE);
@@ -85,7 +85,8 @@ void world_init(GLfloat maxx, GLfloat maxy, GLfloat maxz)
 
 }
 
-void obj_abs_translate(struct object_st *obj, GLfloat x, GLfloat y, GLfloat z)
+void obj_abs_translate(struct object_st *obj, GLfloat x, GLfloat y,
+		       GLfloat z)
 {
     obj->translate[0] = x;
     obj->translate[1] = y;
@@ -125,15 +126,15 @@ void obj_set_modelblk_size(struct object_st *obj, int sz)
 
 void calculate_model_mat4(struct object_st *obj)
 {
-    pvm_calculate_model_mat4(obj->translate,
+    pvm_calculate_model_mat4(obj->modelblk.modelmat,
+			     obj->translate,
 			     obj->scale,
-			     obj->rotate_axis, obj->rotate_angle,
-			     obj->modelblk.modelmat);
+			     obj->rotate_axis, obj->rotate_angle);
 }
 
 void calculate_normal_mat4(struct object_st *obj)
 {
 
-    inverse_mat4(obj->modelblk.modelmat, obj->modelblk.normalmat);
+    inverse_mat4(obj->modelblk.normalmat, obj->modelblk.modelmat);
     transpose_mat4(obj->modelblk.normalmat, obj->modelblk.normalmat);
 }

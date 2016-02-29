@@ -81,7 +81,7 @@ void opengl_stuff(void)
     glDepthFunc(GL_LESS);	// The Type Of Depth Test To Do
 
     glEnable(GL_BLEND);
-    glBlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 }
 
@@ -150,7 +150,7 @@ GLuint compile_shader(GLenum type, const char *shaderfile)
     // The shader is then compiled using the glCompileShader function.
 
     // Load the shader source
-    glShaderSource(shader, 1, (const GLchar const **)&shaderbuf, NULL);
+    glShaderSource(shader, 1, (const GLchar const **) &shaderbuf, NULL);
 
     // Compile the shader
     glCompileShader(shader);
@@ -255,14 +255,15 @@ void buffer_stuff(void)
     // The following commands will talk about our 'vbid' buffer
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     // Give our vertices to OpenGL.
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vbo_data), vbo_data, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vbo_data), vbo_data,
+		 GL_STATIC_DRAW);
 
     glVertexAttribPointer(0,	// attribute location
 			  3,	// size
 			  GL_FLOAT,	// type
 			  GL_FALSE,	// normalized?
 			  0,	// stride
-			  (void *)0	// array buffer offset
+			  (void *) 0	// array buffer offset
 	);
     glEnableVertexAttribArray(0);
 
@@ -299,11 +300,11 @@ void opengl_draw_loop(void)
 
 	// Draw the triangle 1 !
 	glBindVertexArray(vao);
-        glUniform4fv(color_loc, 1, color1);
+	glUniform4fv(color_loc, 1, color1);
 	glDrawArrays(GL_TRIANGLES, 0, 3);	// Starting from vertex 0; 3 vertices total -> 1 triangle
 
 	glDepthMask(0);
-        glUniform4fv(color_loc, 1, color2);
+	glUniform4fv(color_loc, 1, color2);
 	glDrawArrays(GL_TRIANGLES, 3, 3);	// Starting from vertex 0; 3 vertices total -> 1 triangle
 	glDepthMask(1);
 

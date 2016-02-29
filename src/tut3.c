@@ -176,7 +176,8 @@ void setshaders(void)
     GLuint shader[3];
 
     shader[0] = opengl_createshader(GL_VERTEX_SHADER, "shaders/tut3.vert");
-    shader[1] = opengl_createshader(GL_FRAGMENT_SHADER, "shaders/tut3.frag");
+    shader[1] =
+	opengl_createshader(GL_FRAGMENT_SHADER, "shaders/tut3.frag");
     shader[2] = 0;
 
     GLuint shlist[] = { 0, 1, -1 };
@@ -215,11 +216,12 @@ void setvaos(void)
 		    sizeof(vertices) + sizeof(texcoords), sizeof(normals),
 		    normals);
 
-    glVertexAttribPointer(position_loc, 4, GL_FLOAT, GL_FALSE, 0, (void *)0);
+    glVertexAttribPointer(position_loc, 4, GL_FLOAT, GL_FALSE, 0,
+			  (void *) 0);
     glVertexAttribPointer(texcoord_loc, 2, GL_FLOAT, GL_FALSE, 0,
-			  (void *)(sizeof(vertices)));
+			  (void *) (sizeof(vertices)));
     glVertexAttribPointer(normal_loc, 3, GL_FLOAT, GL_FALSE, 0,
-			  (void *)(sizeof(vertices) + sizeof(texcoords)));
+			  (void *) (sizeof(vertices) + sizeof(texcoords)));
 
     if (position_loc >= 0)
 	glEnableVertexAttribArray(position_loc);
@@ -284,9 +286,11 @@ void setuniforms(void)
     int off = 0;
     glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(color_vec), color_vec);
     off += sizeof(color_vec);
-    glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(ambient_vec), ambient_vec);
+    glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(ambient_vec),
+		    ambient_vec);
     off += sizeof(ambient_vec);
-    glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(diffuse_vec), diffuse_vec);
+    glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(diffuse_vec),
+		    diffuse_vec);
     off += sizeof(diffuse_vec);
     glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(specular_vec),
 		    specular_vec);
@@ -420,16 +424,15 @@ void main_init(void)
 
     setvaos();
 
-    pvm_calculate_model_mat4(model_translate, model_scale,
-			     model_rotate_axis, model_rotate_angle,
-			     model_mat4);
+    pvm_calculate_model_mat4(model_mat4, model_translate, model_scale,
+			     model_rotate_axis, model_rotate_angle);
     print_mat4("Model", model_mat4);
 
-    pvm_calculate_view_mat4(camera_position, camera_target, camera_up,
-			    view_mat4);
+    pvm_calculate_view_mat4(view_mat4, camera_position, camera_target,
+			    camera_up);
     print_mat4("View", view_mat4);
 
-    pvm_calculate_proj_mat4(fovy, aspect, znear, zfar, proj_mat4);
+    pvm_calculate_proj_mat4(proj_mat4, fovy, aspect, znear, zfar);
     print_mat4("Proj", proj_mat4);
 
     setuniforms();

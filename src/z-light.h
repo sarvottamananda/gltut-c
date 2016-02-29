@@ -21,7 +21,8 @@ struct light_st {
 extern void light_init(struct light_st *);
 
 extern struct light_st *light_create_light(void);
-extern void light_set_light(struct light_st *, int, GLfloat[3], GLfloat[3]);
+extern void light_set_light(struct light_st *, int, GLfloat[3],
+			    GLfloat[3]);
 extern void light_set_ambience(struct light_st *, GLfloat[3]);
 
 extern void light_set_lightblk_offset(struct light_st *, int);

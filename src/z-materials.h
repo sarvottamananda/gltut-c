@@ -61,12 +61,12 @@ struct material_st {
 extern struct material_st *mtr_get_std_material(int);
 extern void mtr_set_matblk_offset(struct material_st *, int);
 extern void mtr_set_matblk_size(struct material_st *, int);
-extern void mtr_get_std_color(int, GLfloat[]);
+extern void mtr_get_std_color(GLfloat[], int);
 
 extern struct material_st *mtr_new_material(int);
 extern void mtr_delete_material(struct material_st *);
-extern void mtr_set_texcoords(struct material_st *, GLfloat, GLfloat, GLfloat,
-			      GLfloat);
+extern void mtr_set_texcoords(struct material_st *, GLfloat, GLfloat,
+			      GLfloat, GLfloat);
 
 void mtr_init(void);
 

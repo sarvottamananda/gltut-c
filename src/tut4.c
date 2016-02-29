@@ -66,7 +66,8 @@ void setshaders(void)
     shader[1] =
 	opengl_createshader(GL_FRAGMENT_SHADER, "shaders/tut4-plain.frag");
     shader[2] =
-	opengl_createshader(GL_FRAGMENT_SHADER, "shaders/tut4-texture.frag");
+	opengl_createshader(GL_FRAGMENT_SHADER,
+			    "shaders/tut4-texture.frag");
     shader[3] = 0;
 
     GLuint plain_shlist[] = { 0, 1, -1 };
@@ -87,7 +88,8 @@ int checkattrlocs(int progid, int *loc, char **name)
     while (loc[i] >= 0) {
 	int lc = glGetAttribLocation(progid, name[i]);
 
-	DBG_TRACE(0, "Attribute Loc: %d %s expect(%d)", lc, name[i], loc[i]);
+	DBG_TRACE(0, "Attribute Loc: %d %s expect(%d)", lc, name[i],
+		  loc[i]);
 
 	if ((lc != -1) && (lc != loc[i])) {
 	    okay = 0;
@@ -136,7 +138,7 @@ void setvaos(void)
     GLint vcount = 0;
 
     for (mdl = list_models->first; mdl != NULL; mdl = mdl->next) {
-	vcount += mdl_get_vcount(mdl->data);
+	vcount += ((struct model_st *) mdl->data)->vcount;
 
     }
 
@@ -147,55 +149,38 @@ void setvaos(void)
 
     GLint offset = 0;
     GLint cnt = 0;
-    GLfloat *data = NULL;
-
-    if (position_loc >= 0)
-	glVertexAttribPointer(position_loc, 4, GL_FLOAT, GL_FALSE, 0,
-			      BUFFER_OFFSET(offset));
+    struct vbuf_st *data = NULL;
 
     GLint num = 0;
     for (mdl = list_models->first; mdl != NULL; mdl = mdl->next) {
-	cnt = mdl_get_vcount(mdl->data);
-	data = mdl_get_vertices(mdl->data);
+	cnt = ((struct model_st *) mdl->data)->vcount;
+	data = ((struct model_st *) mdl->data)->vbuf;
 
 	mdl_set_vbo_offset(mdl->data, num);
-	DBG_TRACE(0, "Vcount: %d", mdl_get_vcount(mdl->data));
+	DBG_TRACE(0, "Vcount: %d", cnt);
 	DBG_TRACE(0, "Voffset: %d", offset);
 
-	glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(GLfloat) * 4 * cnt,
-			data);
+	glBufferSubData(GL_ARRAY_BUFFER, offset,
+			sizeof(struct vbuf_st) * cnt, data);
 
-	offset += sizeof(GLfloat) * 4 * cnt;
+	offset += sizeof(struct vbuf_st) * cnt;
 	num += cnt;
     }
 
+    if (position_loc >= 0)
+	glVertexAttribPointer(position_loc, 4, GL_FLOAT, GL_FALSE,
+			      sizeof(struct vbuf_st), BUFFER_OFFSET(0));
+
+
     if (tc_loc >= 0)
-	glVertexAttribPointer(tc_loc, 2, GL_FLOAT, GL_FALSE, 0,
-			      BUFFER_OFFSET(offset));
-
-    for (mdl = list_models->first; mdl != NULL; mdl = mdl->next) {
-	cnt = mdl_get_vcount(mdl->data);
-	data = mdl_get_tcoords(mdl->data);
-
-	glBufferSubData(GL_ARRAY_BUFFER, offset, sizeof(GLfloat) * 2 * cnt,
-			data);
-
-	offset += sizeof(GLfloat) * 2 * cnt;
-    }
+	glVertexAttribPointer(tc_loc, 2, GL_FLOAT, GL_FALSE,
+			      sizeof(struct vbuf_st),
+			      BUFFER_OFFSET(4 * sizeof(GLfloat)));
 
     if (normal_loc >= 0)
-	glVertexAttribPointer(normal_loc, 3, GL_FLOAT, GL_FALSE, 0,
-			      BUFFER_OFFSET(offset));
-
-    for (mdl = list_models->first; mdl != NULL; mdl = mdl->next) {
-	cnt = mdl_get_vcount(mdl->data);
-	data = mdl_get_normals(mdl->data);
-
-	glBufferSubData(GL_ARRAY_BUFFER, offset,
-			sizeof(GLfloat) * 3 * cnt, data);
-
-	offset += sizeof(GLfloat) * 3 * cnt;
-    }
+	glVertexAttribPointer(normal_loc, 3, GL_FLOAT, GL_FALSE,
+			      sizeof(struct vbuf_st),
+			      BUFFER_OFFSET(6 * sizeof(GLfloat)));
 
     if (position_loc >= 0)
 	glEnableVertexAttribArray(position_loc);
@@ -237,7 +222,8 @@ void setuniforms_modelblk(void)
 
 	if (modelblk_offset % UniformBufferOffset != 0) {
 	    modelblk_offset +=
-		UniformBufferOffset - modelblk_offset % UniformBufferOffset;
+		UniformBufferOffset -
+		modelblk_offset % UniformBufferOffset;
 	}
 	obj_set_modelblk_offset(obj, modelblk_offset);
 	obj_set_modelblk_size(obj, modelblk_sz);
@@ -340,7 +326,7 @@ void setuniforms_materialsblk(void)
     for (ml = list_materials->first; ml != NULL; ml = ml->next) {
 	struct material_st *mat;
 
-	mat = (struct material_st *)ml->data;
+	mat = (struct material_st *) ml->data;
 
 	if (matblk_offset % UniformBufferOffset != 0) {
 	    matblk_offset +=
@@ -429,7 +415,8 @@ void setuniforms(void)
     ubo_material = ubo[2];
     ubo_light = ubo[3];
 
-    glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT, &UniformBufferOffset);
+    glGetIntegerv(GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT,
+		  &UniformBufferOffset);
 
     DBG_TRACE(0, "Align: %d", UniformBufferOffset);
 
@@ -526,13 +513,16 @@ void objects_init(void)
 {
     dl_search_and_insert(list_models, mdl_get_std_model(MODEL_CUBE));
 
-    dl_search_and_insert(list_materials, mtr_get_std_material(MATERIAL_RED));
+    dl_search_and_insert(list_materials,
+			 mtr_get_std_material(MATERIAL_RED));
     dl_search_and_insert(list_materials,
 			 mtr_get_std_material(MATERIAL_YELLOW));
     dl_search_and_insert(list_materials,
 			 mtr_get_std_material(MATERIAL_WHITE));
-    dl_search_and_insert(list_materials, mtr_get_std_material(MATERIAL_CYAN));
-    dl_search_and_insert(list_materials, mtr_get_std_material(MATERIAL_NONE));
+    dl_search_and_insert(list_materials,
+			 mtr_get_std_material(MATERIAL_CYAN));
+    dl_search_and_insert(list_materials,
+			 mtr_get_std_material(MATERIAL_NONE));
 
     cube1 = obj_create_object("red cube", mdl_get_std_model(MODEL_CUBE),
 			      mtr_get_std_material(MATERIAL_RED)
@@ -555,8 +545,9 @@ void objects_init(void)
 
     dl_search_and_insert(list_materials, bgrass);
 
-    cube4 = obj_create_object("texture cube", mdl_get_std_model(MODEL_CUBE),
-			      bgrass);
+    cube4 =
+	obj_create_object("texture cube", mdl_get_std_model(MODEL_CUBE),
+			  bgrass);
     dl_search_and_insert(list_objects, cube4);
 
     obj_abs_translate(cube1, 0.0f, 0.0f, 0.0f);
@@ -579,8 +570,8 @@ void objects_init(void)
     mtr_set_texcoords(ggrass, 0.0, 0.0, 0.5, 1.0);
 
     checker = obj_create_object("checker",
-				mdl_create_square_model(16, 16, 0.0, 0.0, 4.0,
-							4.0), ggrass);
+				mdl_create_square_model(16, 16, 0.0, 0.0,
+							4.0, 4.0), ggrass);
 
     dl_search_and_insert(list_models, checker->model);
     dl_search_and_insert(list_materials, ggrass);
@@ -598,10 +589,10 @@ void objects_init(void)
     DBG_TRACE(0, "VCount: %d", checker->model->vcount);
     for (int i = 0; i < checker->model->vcount; i++)
 	DBG_TRACE(0, "V[%d] = %f %f %f %f\n", i,
-		  checker->model->vertices[4 * i + 0],
-		  checker->model->vertices[4 * i + 1],
-		  checker->model->vertices[4 * i + 2],
-		  checker->model->vertices[4 * i + 3]);
+		  checker->model->vbuf[i].v[0],
+		  checker->model->vbuf[i].v[1],
+		  checker->model->vbuf[i].v[2],
+		  checker->model->vbuf[i].v[3]);
 
     dl_search_and_insert(list_models, mdl_get_std_model(MODEL_POINT));
     for (int i = 0; i < lights->lightblk.num; i++) {

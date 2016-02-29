@@ -35,7 +35,8 @@ void process_options(int argc, char **argv, struct options_st *opt)
 	int option_index = 0;
 
 #ifdef DEBUG
-	c = getopt_long(argc, argv, "vw:h:d:", long_options, &option_index);
+	c = getopt_long(argc, argv, "vw:h:d:", long_options,
+			&option_index);
 #else
 	c = getopt_long(argc, argv, "vw:h:", long_options, &option_index);
 #endif

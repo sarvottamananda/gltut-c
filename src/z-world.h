@@ -28,7 +28,8 @@ struct object_st {
 
 extern void world_init(GLfloat, GLfloat, GLfloat);
 
-extern void obj_abs_translate(struct object_st *, GLfloat, GLfloat, GLfloat);
+extern void obj_abs_translate(struct object_st *, GLfloat, GLfloat,
+			      GLfloat);
 extern void obj_abs_scale(struct object_st *, GLfloat, GLfloat, GLfloat);
 extern void obj_abs_rotate(struct object_st *, GLfloat, GLfloat, GLfloat,
 			   GLfloat);

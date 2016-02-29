@@ -70,7 +70,7 @@ GLuint opengl_createshader(GLenum type, const char *shaderfile)
     // The shader is then compiled using the glCompileShader function.
 
     // Load the shader source
-    glShaderSource(shader, 1, (const GLchar const **)&shaderbuf, NULL);
+    glShaderSource(shader, 1, (const GLchar const **) &shaderbuf, NULL);
 
     // Compile the shader
     glCompileShader(shader);

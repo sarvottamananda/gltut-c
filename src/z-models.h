@@ -14,21 +14,16 @@ struct model_st {
     GLint vbo_offset;
     GLint draw_mode;
 
-    GLint vcount;
+    unsigned int vcount;
 
-    struct vbuf_st{
-        GLfloat[4] v;
-        GLfloat[3] vt;
-        GLfloat[3] vn;
-    } * vbuf;
+    struct vbuf_st {
+	GLfloat v[4];
+	GLfloat vt[2];
+	GLfloat vn[3];
+    } *vbuf;
 
     struct texture_st *tex;
 };
-
-extern GLint mdl_get_vcount(struct model_st *);
-extern GLfloat *mdl_get_vertices(struct model_st *);
-extern GLfloat *mdl_get_normals(struct model_st *);
-extern GLfloat *mdl_get_tcoords(struct model_st *);
 
 extern void mdl_set_vbo_offset(struct model_st *, GLint);
 extern GLint mdl_get_vbo_offset(struct model_st *);

@@ -6,7 +6,7 @@ struct dlist_hdr *dl_create(void)
 {
     struct dlist_hdr *tmp = NULL;
 
-    tmp = (struct dlist_hdr *)malloc(sizeof(struct dlist_hdr));
+    tmp = (struct dlist_hdr *) malloc(sizeof(struct dlist_hdr));
     tmp->size = 0;
     tmp->first = NULL;
     tmp->last = NULL;
@@ -18,7 +18,7 @@ void dl_insert(struct dlist_hdr *dl, void *p)
 {
     struct dlist_st *tmp;
 
-    tmp = (struct dlist_st *)malloc(sizeof(struct dlist_st));
+    tmp = (struct dlist_st *) malloc(sizeof(struct dlist_st));
     tmp->data = p;
 
     if (dl->last == NULL) {
@@ -121,7 +121,7 @@ struct list_st *sl_push(struct list_st *l, void *p)
 {
     struct list_st *tmp;
 
-    tmp = (struct list_st *)malloc(sizeof(struct list_st));
+    tmp = (struct list_st *) malloc(sizeof(struct list_st));
     tmp->data = p;
     tmp->next = l;
     return l;
@@ -176,7 +176,7 @@ struct listi_st *sli_push(struct listi_st *l, int n)
 {
     struct listi_st *tmp;
 
-    tmp = (struct listi_st *)malloc(sizeof(struct listi_st));
+    tmp = (struct listi_st *) malloc(sizeof(struct listi_st));
     tmp->data = n;
     tmp->next = l;
     return l;

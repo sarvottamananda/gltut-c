@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <GL/glew.h>
 
+#include "debug.h"
 #include "z-main.h"
 #include "z-shader.h"
 
@@ -38,6 +39,10 @@ void main_init(void)
     vposition_loc = glGetAttribLocation(progid, "vposition");
     //vposition_loc = 0;
 
+    DBG_TRACE(0,"vposition : %d", vposition_loc);
+    DBG_TRACE(0,"progid : %d", progid);
+    DBG_TRACE(0,"size : %d", sizeof(vbo1_data));
+
     glGenVertexArrays(2, vao);
 
     glBindVertexArray(vao[0]);
@@ -47,17 +52,17 @@ void main_init(void)
     // The following commands will talk about our 'vbid' buffer
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     // Give our vertices to OpenGL.
-    glBufferData(GL_ARRAY_BUFFER, sizeof(vbo1_data), vbo1_data,
-		 GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vbo1_data), vbo1_data, GL_STATIC_DRAW);
 
     glVertexAttribPointer(vposition_loc,	// attribute location
 			  3,	// size
 			  GL_FLOAT,	// type
 			  GL_FALSE,	// normalized?
 			  0,	// stride
-			  (void *)0	// array buffer offset
+			  (void *) 0	// array buffer offset
 	);
     glEnableVertexAttribArray(vposition_loc);
+
 
     glBindVertexArray(vao[1]);
 
@@ -74,10 +79,10 @@ void main_init(void)
 			  GL_FLOAT,	// type
 			  GL_FALSE,	// normalized?
 			  0,	// stride
-			  (void *)0	// array buffer offset
+			  (void *) 0	// array buffer offset
 	);
-    glEnableVertexAttribArray(vposition_loc);
 
+    glEnableVertexAttribArray(vposition_loc);
     glBindVertexArray(0);
 
 }
@@ -86,6 +91,9 @@ void main_draw(void)
 {
     glUseProgram(progid);
 
+    //DBG_TRACE(0,"vposition : %d", vposition_loc);
+    //DBG_TRACE(0,"progid : %d", progid);
+
     // Draw the triangle 1 !
     glBindVertexArray(vao[0]);
     glDrawArrays(GL_TRIANGLES, 0, 3);	// Starting from vertex 0; 3 vertices total -> 1 triangle
@@ -93,5 +101,6 @@ void main_draw(void)
     // Draw the triangle 2 !
     glBindVertexArray(vao[1]);
     glDrawArrays(GL_TRIANGLES, 0, 3);	// Starting from vertex 0; 3 vertices total -> 1 triangle
+    
     glBindVertexArray(0);
 }

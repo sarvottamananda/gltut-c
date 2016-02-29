@@ -10,9 +10,9 @@
 
 void camera_init(struct scene_st *c)
 {
-    set_vec3(1.5f, -1.5f, 1.5f, c->sceneblk.camera_position);
-    set_vec3(0.0f, 0.0f, 0.0f, c->sceneblk.camera_target);
-    set_vec3(0.0f, 0.0f, 1.0f, c->sceneblk.camera_up);
+    set_vec3(c->sceneblk.camera_position, 1.5f, -1.5f, 1.5f);
+    set_vec3(c->sceneblk.camera_target, 0.0f, 0.0f, 0.0f);
+    set_vec3(c->sceneblk.camera_up, 0.0f, 0.0f, 1.0f);
 
     c->camera_fovy = 90.0f * M_PI / 180.0f;
     c->camera_aspect = 4.0f / 3.0f;
@@ -25,7 +25,7 @@ struct scene_st *camera_create_scene(void)
 {
     struct scene_st *tmp;
 
-    tmp = (struct scene_st *)malloc(sizeof(struct scene_st));
+    tmp = (struct scene_st *) malloc(sizeof(struct scene_st));
     if (tmp == NULL) {
 	perror("Cannot allocate memory for scene_st");
     }
@@ -133,25 +133,28 @@ void camera_reset(struct scene_st *sc)
     GLfloat right[3];
     GLfloat target[3];
 
-    sub_vec3(sc->sceneblk.camera_target, sc->sceneblk.camera_position,
-	     target);
-    cross_vec3(target, sc->sceneblk.camera_up, right);
-    cross_vec3(sc->sceneblk.camera_up, right, front);
+    sub_vec3(target, sc->sceneblk.camera_target,
+	     sc->sceneblk.camera_position);
+    cross_vec3(right, target, sc->sceneblk.camera_up);
+    cross_vec3(front, sc->sceneblk.camera_up, right);
     normalize_vec3(front);
 
-    add_vec3(sc->sceneblk.camera_position, front, sc->sceneblk.camera_target);
+    add_vec3(sc->sceneblk.camera_target, sc->sceneblk.camera_position,
+	     front);
 }
 
 void calculate_proj_mat4(struct scene_st *sc)
 {
-    pvm_calculate_proj_mat4(sc->camera_fovy, sc->camera_aspect,
-			    sc->camera_znear, sc->camera_zfar,
-			    sc->sceneblk.projmat);
+    pvm_calculate_proj_mat4(sc->sceneblk.projmat, sc->camera_fovy,
+			    sc->camera_aspect, sc->camera_znear,
+			    sc->camera_zfar);
+
 }
 
 void calculate_view_mat4(struct scene_st *sc)
 {
-    pvm_calculate_view_mat4(sc->sceneblk.camera_position,
+    pvm_calculate_view_mat4(sc->sceneblk.viewmat,
+			    sc->sceneblk.camera_position,
 			    sc->sceneblk.camera_target,
-			    sc->sceneblk.camera_up, sc->sceneblk.viewmat);
+			    sc->sceneblk.camera_up);
 }

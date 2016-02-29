@@ -79,20 +79,20 @@ void zero_vec4(GLfloat v[])
     v[3] = 0.0f;
 }
 
-void set_vec2(GLfloat v0, GLfloat v1, GLfloat v[])
+void set_vec2(GLfloat v[], GLfloat v0, GLfloat v1)
 {
     v[0] = v0;
     v[1] = v1;
 }
 
-void set_vec3(GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v[])
+void set_vec3(GLfloat v[], GLfloat v0, GLfloat v1, GLfloat v2)
 {
     v[0] = v0;
     v[1] = v1;
     v[2] = v2;
 }
 
-void set_vec4(GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3, GLfloat v[])
+void set_vec4(GLfloat v[], GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
 {
     v[0] = v0;
     v[1] = v1;
@@ -100,20 +100,20 @@ void set_vec4(GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3, GLfloat v[])
     v[3] = v3;
 }
 
-void copy_vec2(GLfloat v[2], GLfloat res[])
+void copy_vec2(GLfloat res[], GLfloat v[2])
 {
     res[0] = v[0];
     res[1] = v[1];
 }
 
-void copy_vec3(GLfloat v[3], GLfloat res[])
+void copy_vec3(GLfloat res[], GLfloat v[3])
 {
     res[0] = v[0];
     res[1] = v[1];
     res[2] = v[2];
 }
 
-void copy_vec4(GLfloat v[4], GLfloat res[])
+void copy_vec4(GLfloat res[], GLfloat v[4])
 {
     res[0] = v[0];
     res[1] = v[1];
@@ -121,7 +121,7 @@ void copy_vec4(GLfloat v[4], GLfloat res[])
     res[3] = v[3];
 }
 
-void copy_mat4(GLfloat a[4][4], GLfloat res[][4])
+void copy_mat4(GLfloat res[][4], GLfloat a[4][4])
 {
     for (int j = 0; j < 4; j++) {
 	for (int i = 0; i < 4; i++) {
@@ -130,7 +130,7 @@ void copy_mat4(GLfloat a[4][4], GLfloat res[][4])
     }
 }
 
-void transpose_mat4(GLfloat a[4][4], GLfloat res[][4])
+void transpose_mat4(GLfloat res[][4], GLfloat a[][4])
 {
     GLfloat tmp[4][4];
 
@@ -139,10 +139,10 @@ void transpose_mat4(GLfloat a[4][4], GLfloat res[][4])
 	    tmp[j][i] = a[i][j];
 	}
     }
-    copy_mat4(tmp, res);
+    copy_mat4(res, tmp);
 }
 
-void add_mat4(GLfloat a[4][4], GLfloat b[4][4], GLfloat res[][4])
+void add_mat4(GLfloat res[][4], GLfloat a[4][4], GLfloat b[4][4])
 {
     for (int j = 0; j < 4; j++) {
 	for (int i = 0; i < 4; i++) {
@@ -151,21 +151,21 @@ void add_mat4(GLfloat a[4][4], GLfloat b[4][4], GLfloat res[][4])
     }
 }
 
-void sub_vec3(GLfloat v1[3], GLfloat v2[3], GLfloat res[])
+void sub_vec3(GLfloat res[], GLfloat v1[3], GLfloat v2[3])
 {
     res[0] = v1[0] - v2[0];
     res[1] = v1[1] - v2[1];
     res[2] = v1[2] - v2[2];
 }
 
-void add_vec3(GLfloat v1[3], GLfloat v2[3], GLfloat res[])
+void add_vec3(GLfloat res[], GLfloat v1[3], GLfloat v2[3])
 {
     res[0] = v1[0] + v2[0];
     res[1] = v1[1] + v2[1];
     res[2] = v1[2] + v2[2];
 }
 
-void mult_mat4(GLfloat a[4][4], GLfloat b[4][4], GLfloat res[][4])
+void mult_mat4(GLfloat res[][4], GLfloat a[4][4], GLfloat b[4][4])
 {
     GLfloat tmp[4][4];
 
@@ -179,7 +179,7 @@ void mult_mat4(GLfloat a[4][4], GLfloat b[4][4], GLfloat res[][4])
 	    tmp[j][i] = sum;
 	}
     }
-    copy_mat4(tmp, res);
+    copy_mat4(res, tmp);
 }
 
 void normalize_vec3(GLfloat v[])
@@ -196,19 +196,19 @@ void normalize_vec3(GLfloat v[])
     }
 }
 
-void cross_vec3(GLfloat v1[], GLfloat v2[], GLfloat res[])
+void cross_vec3(GLfloat res[], GLfloat v1[3], GLfloat v2[3])
 {
     res[0] = v1[1] * v2[2] - v1[2] * v2[1];
     res[1] = v1[2] * v2[0] - v1[0] * v2[2];
     res[2] = v1[0] * v2[1] - v1[1] * v2[0];
 }
 
-GLfloat dot_vec3(GLfloat v1[], GLfloat v2[])
+GLfloat dot_vec3(GLfloat v1[3], GLfloat v2[3])
 {
     return v1[0] * v2[0] + v1[1] * v2[1] + v1[2] * v2[2];
 }
 
-void inverse_mat3(GLfloat m[3][3], GLfloat res[][3])
+void inverse_mat3(GLfloat res[][3], GLfloat m[3][3])
 {
     // computes the inverse of a matrix m
 
@@ -231,7 +231,7 @@ void inverse_mat3(GLfloat m[3][3], GLfloat res[][3])
     res[2][2] = (m[0][0] * m[1][1] - m[1][0] * m[0][1]) * invdet;
 }
 
-void inverse_mat4(GLfloat a[4][4], GLfloat res[][4])
+void inverse_mat4(GLfloat res[][4], GLfloat a[4][4])
 {
     GLfloat s0 = a[0][0] * a[1][1] - a[1][0] * a[0][1];
     GLfloat s1 = a[0][0] * a[1][2] - a[1][0] * a[0][2];
