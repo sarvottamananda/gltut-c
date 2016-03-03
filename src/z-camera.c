@@ -10,14 +10,14 @@
 
 void camera_init(struct scene_st *c)
 {
-    set_vec3(c->sceneblk.camera_position, 1.5f, -1.5f, 1.5f);
+    set_vec3(c->sceneblk.camera_position, 8.0f, -8.0f, 2.0f);
     set_vec3(c->sceneblk.camera_target, 0.0f, 0.0f, 0.0f);
     set_vec3(c->sceneblk.camera_up, 0.0f, 0.0f, 1.0f);
 
-    c->camera_fovy = 90.0f * M_PI / 180.0f;
+    c->camera_fovy = 30.0f * M_PI / 180.0f;
     c->camera_aspect = 4.0f / 3.0f;
     c->camera_znear = 1.0f;
-    c->camera_zfar = 10.0f;
+    c->camera_zfar = 20.0f;
 
 }
 

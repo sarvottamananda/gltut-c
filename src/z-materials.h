@@ -60,19 +60,28 @@ struct material_st {
     int matblk_size;
 };
 
-extern struct material_st *mtr_get_std_material(int);
-extern void mtr_set_matblk_offset(struct material_st *, int);
-extern void mtr_set_matblk_size(struct material_st *, int);
-extern void mtr_get_std_color(GLfloat[], int);
+extern struct material_st *mtrl_get_std_material(int);
+extern void mtrl_set_matblk_offset(struct material_st *, int);
+extern void mtrl_set_matblk_size(struct material_st *, int);
+extern void mtrl_get_std_color(GLfloat[], int);
 
-extern struct material_st *mtr_new_material(int);
-extern void mtr_delete_material(struct material_st *);
-extern void mtr_set_texcoords(struct material_st *, GLfloat, GLfloat,
-			      GLfloat, GLfloat);
-extern void mtr_set_name(struct material_st *m, char *name);
+extern struct material_st *mtrl_new_material(int);
+extern void mtrl_delete_material(struct material_st *);
+extern void mtrl_set_texcoords(struct material_st *, GLfloat, GLfloat,
+			       GLfloat, GLfloat);
+extern void mtrl_set_name(struct material_st *m, char *name);
 
-extern void mtr_init(void);
+extern void mtrl_copy(struct material_st *dst, struct material_st *src);
+extern void mtrl_set_ambient(struct material_st *m, GLfloat r, GLfloat g,
+			     GLfloat b, GLfloat a);
+extern void mtrl_set_diffuse(struct material_st *m, GLfloat r, GLfloat g,
+			     GLfloat b, GLfloat a);
+extern void mtrl_set_specular(struct material_st *m, GLfloat r, GLfloat g,
+			      GLfloat b, GLfloat a);
+extern void mtrl_set_shininess(struct material_st *m, GLfloat s);
 
-extern void mtr_print(struct material_st *mat);
+extern void mtrl_init(void);
+
+extern void mtrl_print(struct material_st *mat);
 
 #endif

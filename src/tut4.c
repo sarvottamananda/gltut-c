@@ -325,8 +325,8 @@ void setuniforms_materialsblk(void)
 	    matblk_offset +=
 		UniformBufferOffset - matblk_offset % UniformBufferOffset;
 	}
-	mtr_set_matblk_offset(mat, matblk_offset);
-	mtr_set_matblk_size(mat, materialblk_sz);
+	mtrl_set_matblk_offset(mat, matblk_offset);
+	mtrl_set_matblk_size(mat, materialblk_sz);
 
 	glBufferSubData(GL_UNIFORM_BUFFER, matblk_offset, materialblk_sz,
 			&(mat->matblk));
@@ -507,30 +507,31 @@ void objects_init(void)
 {
     dl_search_and_insert(list_models, mdl_get_std_model(MODEL_CUBE));
 
-    dl_search_and_insert(list_materials, mtr_get_std_material(MATERIAL_RED));
-    dl_search_and_insert(list_materials, mtr_get_std_material(MATERIAL_YELLOW));
-    dl_search_and_insert(list_materials, mtr_get_std_material(MATERIAL_WHITE));
-    dl_search_and_insert(list_materials, mtr_get_std_material(MATERIAL_CYAN));
-    dl_search_and_insert(list_materials, mtr_get_std_material(MATERIAL_NONE));
+    dl_search_and_insert(list_materials, mtrl_get_std_material(MATERIAL_RED));
+    dl_search_and_insert(list_materials,
+			 mtrl_get_std_material(MATERIAL_YELLOW));
+    dl_search_and_insert(list_materials, mtrl_get_std_material(MATERIAL_WHITE));
+    dl_search_and_insert(list_materials, mtrl_get_std_material(MATERIAL_CYAN));
+    dl_search_and_insert(list_materials, mtrl_get_std_material(MATERIAL_NONE));
 
     cube1 = obj_create_object("red cube", mdl_get_std_model(MODEL_CUBE),
-			      mtr_get_std_material(MATERIAL_RED)
+			      mtrl_get_std_material(MATERIAL_RED)
 	);
 
     dl_search_and_insert(list_objects, cube1);
 
     cube2 = obj_create_object("yellow cube", mdl_get_std_model(MODEL_CUBE),
-			      mtr_get_std_material(MATERIAL_YELLOW)
+			      mtrl_get_std_material(MATERIAL_YELLOW)
 	);
     dl_search_and_insert(list_objects, cube2);
 
     cube3 = obj_create_object("white cube", mdl_get_std_model(MODEL_CUBE),
-			      mtr_get_std_material(MATERIAL_WHITE)
+			      mtrl_get_std_material(MATERIAL_WHITE)
 	);
     dl_search_and_insert(list_objects, cube3);
 
-    struct material_st *bgrass = mtr_new_material(1);
-    mtr_set_texcoords(bgrass, 0.5, 0.0, 0.5, 1.0);
+    struct material_st *bgrass = mtrl_new_material(1);
+    mtrl_set_texcoords(bgrass, 0.5, 0.0, 0.5, 1.0);
 
     dl_search_and_insert(list_materials, bgrass);
 
@@ -555,13 +556,12 @@ void objects_init(void)
     obj_abs_scale(cube4, 0.5f, 0.5f, 0.5f);
     obj_abs_rotate(cube4, 1.0f, 1.0f, 1.0f, degtorad(0.0f));
 
-    struct material_st *ggrass = mtr_new_material(1);
-    mtr_set_texcoords(ggrass, 0.0, 0.0, 0.5, 1.0);
+    struct material_st *ggrass = mtrl_new_material(1);
+    mtrl_set_texcoords(ggrass, 0.0, 0.0, 0.5, 1.0);
 
-    checker = obj_create_object("checker",
-				mdl_create_checker_with_triangles(16, 16, 0.0,
-								  0.0, 4.0,
-								  4.0), ggrass);
+    struct model_st *model =
+	mdl_create_checker_triangulated(16, 16, 0.0, 4.0, 0.0, 4.0);
+    checker = obj_create_object("checker", model, ggrass);
 
     dl_search_and_insert(list_models, checker->model);
     dl_search_and_insert(list_materials, ggrass);
@@ -587,7 +587,7 @@ void objects_init(void)
     for (int i = 0; i < lights->lightblk.num; i++) {
 	light_obj[i] = obj_create_object("light obj",
 					 mdl_get_std_model(MODEL_POINT),
-					 mtr_get_std_material(MATERIAL_WHITE));
+					 mtrl_get_std_material(MATERIAL_WHITE));
 	dl_search_and_insert(list_objects, light_obj[i]);
 
 	obj_abs_translate(light_obj[i],
@@ -609,7 +609,7 @@ void main_init(void)
 
     world_init(1024.0f, 1024.0f, 1024.0f);
     mdl_init();
-    mtr_init();
+    mtrl_init();
 
     sc = camera_create_scene();
     camera_init(sc);

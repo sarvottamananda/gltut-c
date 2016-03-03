@@ -36,12 +36,16 @@ extern GLint mdl_get_vbo_offset(struct model_st *);
 
 extern struct model_st *mdl_get_std_model(int);
 
-extern struct model_st *mdl_create_checker_with_triangles(int, int, GLfloat,
-							  GLfloat, GLfloat,
-							  GLfloat);
-extern struct model_st *mdl_create_checker_with_strips(int xnum, int ynum,
-						       GLfloat lx, GLfloat by,
-						       GLfloat rx, GLfloat ty);
+extern struct model_st *mdl_create_checker_triangulated(int, int, GLfloat,
+							GLfloat, GLfloat,
+							GLfloat);
+extern struct model_st *mdl_create_checker_stripped(int xnum, int ynum,
+						    GLfloat lx, GLfloat by,
+						    GLfloat rx, GLfloat ty);
+extern struct model_st *mdl_create_sphere_stripped(int cnum, int znum,
+						   GLfloat lx, GLfloat rx,
+						   GLfloat by, GLfloat ty);
+
 extern struct model_st *mdl_create_model_from_geom(char *name, struct geom_model_st
 						   *geom);
 

@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <GL/glew.h>
+#include <math.h>
 
 #include "z-geom.h"
 #include "z-models.h"
@@ -345,6 +346,7 @@ struct model_st *mdl_get_std_model(int m)
     return &(std_model[m]);
 }
 
+/*
 void subdivide(GLfloat u1[2], GLfloat u2[2], GLfloat u3[2],
 	       GLfloat cutoff, int depth,
 	       GLfloat(*curv) (GLfloat[2]),
@@ -374,10 +376,11 @@ void subdivide(GLfloat u1[2], GLfloat u2[2], GLfloat u3[2],
     subdivide(u3, u31, u23, cutoff, depth - 1, curv, surf);
     subdivide(u12, u23, u31, cutoff, depth - 1, curv, surf);
 }
+*/
 
-struct model_st *mdl_create_checker_with_triangles(int xnum, int ynum,
-						   GLfloat lx, GLfloat by,
-						   GLfloat rx, GLfloat ty)
+struct model_st *mdl_create_checker_triangulated(int xnum, int ynum,
+						 GLfloat lx, GLfloat rx,
+						 GLfloat by, GLfloat ty)
 {
     struct model_st *tmp;
 
@@ -438,27 +441,26 @@ struct model_st *mdl_create_checker_with_triangles(int xnum, int ynum,
     return tmp;
 }
 
-struct model_st *mdl_create_checker_with_strips(int xnum, int ynum,
-						GLfloat lx, GLfloat by,
-						GLfloat rx, GLfloat ty)
+struct model_st *mdl_create_sphere_stripped(int cnum, int znum, GLfloat lx,
+					    GLfloat rx, GLfloat by, GLfloat ty)
 {
     struct model_st *tmp;
 
     tmp = mdl_new_model(1);
 
-    tmp->name = strdup("checker_strips");
+    tmp->name = strdup("sphere_strips");
 
-    int vcount = 2 * (xnum + 1) * ynum;
+    int vcount = 2 * (cnum + 1) * znum;
 
     tmp->draw_mode = GL_TRIANGLE_STRIP;
-    set_primitive_count(tmp, ynum);
-    for (int i = 0; i < ynum; i++) {
-	tmp->start[i] = i * 2 * (xnum + 1);
-	tmp->count[i] = 2 * (xnum + 1);
+    set_primitive_count(tmp, znum);
+    for (int i = 0; i < znum; i++) {
+	tmp->start[i] = i * 2 * (cnum + 1);
+	tmp->count[i] = 2 * (cnum + 1);
     }
 
-    GLfloat dx = 1.0f / xnum;
-    GLfloat dy = 1.0f / ynum;
+    double tc = M_PI * 2 / cnum;
+    double tz = M_PI / znum;
 
     GLfloat(*vertices)[4] =
 	(GLfloat(*)[4]) malloc(sizeof(GLfloat) * 4 * vcount);
@@ -466,17 +468,24 @@ struct model_st *mdl_create_checker_with_strips(int xnum, int ynum,
     GLfloat(*normals)[3] = (GLfloat(*)[3]) malloc(sizeof(GLfloat) * 3 * vcount);
 
     int k = 0;
-    for (int j = 0; j < ynum; j++) {
-	for (int i = 0; i < xnum + 1; i++) {
-	    set_vec4(vertices[k], i * dx, j * dy, 0.0, 1.0);
-	    set_vec4(vertices[k + 1], i * dx, (j + 1) * dy, 0.0, 1.0);
+    for (int j = 0; j < znum; j++) {
+	for (int i = 0; i < cnum + 1; i++) {
+	    double cz = cos(j * tz - M_PI / 2);
+	    double cz1 = cos((j + 1) * tz - M_PI / 2);
+
+	    set_vec4(vertices[k], cos(i * tc) * cz, sin(i * tc) * cz,
+		     sin(j * tz - M_PI / 2), 1.0);
+	    set_vec4(vertices[k + 1], cos(i * tc) * cz1, sin(i * tc) * cz1,
+		     sin((j + 1) * tz - M_PI / 2), 1.0);
 
 	    set_vec2(tcoords[k], lx + i * (rx - lx), by + j * (ty - by));
 	    set_vec2(tcoords[k + 1], lx + i * (rx - lx),
 		     by + (j + 1) * (ty - by));
 
-	    set_vec3(normals[k], 0.0, 0.0, 1.0);
-	    set_vec3(normals[k + 1], 0.0, 0.0, 1.0);
+	    set_vec3(normals[k], cos(i * tc) * cz, sin(i * tc) * cz,
+		     sin(j * tz - M_PI / 2));
+	    set_vec3(normals[k + 1], cos(i * tc) * cz1, sin(i * tc) * cz1,
+		     sin((j + 1) * tz - M_PI / 2));
 
 	    k += 2;
 	}
@@ -550,4 +559,56 @@ void mdl_print(struct model_st *mdl)
 	       mdl->vbo_start[i], mdl->count[i]);
     }
 
+}
+
+struct model_st *mdl_create_checker_stripped(int xnum, int ynum,
+					     GLfloat lx, GLfloat rx,
+					     GLfloat by, GLfloat ty)
+{
+    struct model_st *tmp;
+
+    tmp = mdl_new_model(1);
+
+    tmp->name = strdup("checker_strips");
+
+    int vcount = 2 * (xnum + 1) * ynum;
+
+    tmp->draw_mode = GL_TRIANGLE_STRIP;
+    set_primitive_count(tmp, ynum);
+    for (int i = 0; i < ynum; i++) {
+	tmp->start[i] = i * 2 * (xnum + 1);
+	tmp->count[i] = 2 * (xnum + 1);
+    }
+
+    GLfloat dx = 1.0f / xnum;
+    GLfloat dy = 1.0f / ynum;
+
+    GLfloat(*vertices)[4] =
+	(GLfloat(*)[4]) malloc(sizeof(GLfloat) * 4 * vcount);
+    GLfloat(*tcoords)[2] = (GLfloat(*)[2]) malloc(sizeof(GLfloat) * 2 * vcount);
+    GLfloat(*normals)[3] = (GLfloat(*)[3]) malloc(sizeof(GLfloat) * 3 * vcount);
+
+    int k = 0;
+    for (int j = 0; j < ynum; j++) {
+	for (int i = 0; i < xnum + 1; i++) {
+	    set_vec4(vertices[k], i * dx, j * dy, 0.0, 1.0);
+	    set_vec4(vertices[k + 1], i * dx, (j + 1) * dy, 0.0, 1.0);
+
+	    set_vec2(tcoords[k], lx + i * (rx - lx), by + j * (ty - by));
+	    set_vec2(tcoords[k + 1], lx + i * (rx - lx),
+		     by + (j + 1) * (ty - by));
+
+	    set_vec3(normals[k], 0.0, 0.0, 1.0);
+	    set_vec3(normals[k + 1], 0.0, 0.0, 1.0);
+
+	    k += 2;
+	}
+    }
+
+    tmp->vcount = vcount;
+    tmp->vbuf =
+	mdl_create_vbuf(vcount, (GLfloat *) vertices, (GLfloat *) tcoords,
+			(GLfloat *) normals);
+
+    return tmp;
 }

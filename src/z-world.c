@@ -110,7 +110,7 @@ void obj_abs_rotate(struct object_st *obj, GLfloat x, GLfloat y, GLfloat z,
 
 void obj_set_material(struct object_st *obj, int mat)
 {
-    obj->material = mtr_get_std_material(mat);
+    obj->material = mtrl_get_std_material(mat);
 }
 
 void obj_set_modelblk_offset(struct object_st *obj, int offset)

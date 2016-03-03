@@ -36,12 +36,12 @@ void light_set_light(struct light_st *lt, int n, GLfloat lp[3], GLfloat e[3])
 
 void light_init(struct light_st *lt)
 {
-    set_vec3(lt->lightblk.ambience, 0.1f, 0.1f, 0.1f);
+    set_vec3(lt->lightblk.ambience, 0.3f, 0.3f, 0.3f);
     set_vec3(lt->lightblk.emission[0], 0.5f, 0.5f, 0.5f);
     set_vec3(lt->lightblk.emission[1], 0.6f, 0.6f, 0.6f);
     set_vec3(lt->lightblk.emission[2], 0.7f, 0.7f, 0.7f);
     set_vec3(lt->lightblk.emission[3], 0.8f, 0.8f, 0.8f);
-    set_vec3(lt->lightblk.pos[0], -1.0f, -1.5f, 1.0f);
+    set_vec3(lt->lightblk.pos[0], 0.0f, 0.0f, 2.5f);
     set_vec3(lt->lightblk.pos[1], 0.0f, 0.0f, 2.0f);
     set_vec3(lt->lightblk.pos[2], 2.0f, 0.0f, 2.0f);
     set_vec3(lt->lightblk.pos[3], 2.0f, 2.0f, 2.0f);
