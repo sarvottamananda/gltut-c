@@ -17,23 +17,25 @@ static int id = 0;
 static struct material_st black_mat = {
     MATERIAL_NONE, "nil",
     {
-     {0.0f, 0.0f, 0.0f, 0.0f},
-     {0.0f, 0.0f, 0.0f, 0.0f},
-     {0.0f, 0.0f, 0.0f, 0.0f},
-     0.0f,
-     0.0f,
+     {0.0f, 0.0f, 0.0f}, 0.0f,
+     {0.0f, 0.0f, 0.0f}, 0.0f,
+     {0.0f, 0.0f, 0.0f}, 0.0f,
      {0.0f, 0.0f},
-     {0.0f, 0.0f}
+     {0.0f, 0.0f},
+     1.0f,
+     1.0f,
      },
-    NULL
+    NULL,
+    0, 0
 };
 
 void mtrl_copy(struct material_st *dst, struct material_st *src)
 {
-    copy_vec4(dst->matblk.ambient, src->matblk.ambient);
-    copy_vec4(dst->matblk.diffuse, src->matblk.diffuse);
-    copy_vec4(dst->matblk.specular, src->matblk.specular);
+    copy_vec3(dst->matblk.ambient, src->matblk.ambient);
+    copy_vec3(dst->matblk.diffuse, src->matblk.diffuse);
+    copy_vec3(dst->matblk.specular, src->matblk.specular);
     dst->matblk.shininess = src->matblk.shininess;
+    dst->matblk.opacity = src->matblk.opacity;
     dst->tex = src->tex;
 }
 
@@ -67,6 +69,8 @@ struct material_st *mtrl_new_material(int num)
 	tmp[i].name = NULL;
 	mtrl_copy(&tmp[i], &black_mat);
     }
+
+    mtrl_print(tmp);
 
     return tmp;
 }
@@ -196,106 +200,74 @@ void mtrl_init(void)
     mat = MATERIAL_NONE;
     mtrl_get_std_color(color, COLOR_NONE);
     mtrl_copy(&(std_material[mat]), &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
+    copy_vec3(std_material[mat].matblk.ambient, color);
+    copy_vec3(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("none");
 
     mat = MATERIAL_WHITE;
     mtrl_get_std_color(color, COLOR_WHITE);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
+    copy_vec3(std_material[mat].matblk.ambient, color);
+    copy_vec3(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("white");
 
     mat = MATERIAL_BLACK;
     mtrl_get_std_color(color, COLOR_BLACK);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
+    copy_vec3(std_material[mat].matblk.ambient, color);
+    copy_vec3(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("black");
 
     mat = MATERIAL_RED;
     mtrl_get_std_color(color, COLOR_RED);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
+    copy_vec3(std_material[mat].matblk.ambient, color);
+    copy_vec3(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("red");
 
     mat = MATERIAL_BLUE;
     mtrl_get_std_color(color, COLOR_BLUE);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
+    copy_vec3(std_material[mat].matblk.ambient, color);
+    copy_vec3(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("blue");
 
     mat = MATERIAL_GREEN;
     mtrl_get_std_color(color, COLOR_GREEN);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
+    copy_vec3(std_material[mat].matblk.ambient, color);
+    copy_vec3(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("green");
 
     mat = MATERIAL_YELLOW;
     mtrl_get_std_color(color, COLOR_YELLOW);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
+    copy_vec3(std_material[mat].matblk.ambient, color);
+    copy_vec3(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("yellow");
 
     mat = MATERIAL_MAGENTA;
     mtrl_get_std_color(color, COLOR_MAGENTA);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
+    copy_vec3(std_material[mat].matblk.ambient, color);
+    copy_vec3(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("magenta");
 
     mat = MATERIAL_CYAN;
     mtrl_get_std_color(color, COLOR_CYAN);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
+    copy_vec3(std_material[mat].matblk.ambient, color);
+    copy_vec3(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("cyan");
-
-    mat = MATERIAL_1000;
-    mtrl_get_std_color(color, COLOR_1000);
-    mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
-    std_material[mat].id = mat;
-    std_material[mat].name = strdup("mat1000");
-
-    mat = MATERIAL_0100;
-    mtrl_get_std_color(color, COLOR_0100);
-    mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
-    std_material[mat].id = mat;
-    std_material[mat].name = strdup("mat0100");
-
-    mat = MATERIAL_0010;
-    mtrl_get_std_color(color, COLOR_0010);
-    mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
-    std_material[mat].id = mat;
-    std_material[mat].name = strdup("mat0010");
-
-    mat = MATERIAL_0001;
-    mtrl_get_std_color(color, COLOR_0001);
-    mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec4(std_material[mat].matblk.ambient, color);
-    copy_vec4(std_material[mat].matblk.diffuse, color);
-    std_material[mat].id = mat;
-    std_material[mat].name = strdup("mat0001");
 
     id = MATERIAL_MAX;
 
@@ -326,19 +298,22 @@ void mtrl_print(struct material_st *mat)
 {
     printf("Material: %s [%d]\n", mat->name, mat->id);
     printf("\tAmbient: ");
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 3; i++)
 	printf("%f ", mat->matblk.ambient[i]);
     printf("\n");
     printf("\tDiffuse: ");
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 3; i++)
 	printf("%f ", mat->matblk.diffuse[i]);
     printf("\n");
     printf("\tSpecular: ");
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 3; i++)
 	printf("%f ", mat->matblk.specular[i]);
     printf("\n");
     printf("\tShininess: ");
     printf("%f ", mat->matblk.shininess);
+    printf("\n");
+    printf("\tOpacity: ");
+    printf("%f ", mat->matblk.opacity);
     printf("\n");
     printf("\tTex origin: ");
     for (int i = 0; i < 2; i++)

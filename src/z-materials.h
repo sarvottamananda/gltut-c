@@ -7,7 +7,6 @@ enum material_enum {
     MATERIAL_NONE, MATERIAL_WHITE, MATERIAL_BLACK,
     MATERIAL_RED, MATERIAL_GREEN, MATERIAL_BLUE,
     MATERIAL_YELLOW, MATERIAL_MAGENTA, MATERIAL_CYAN,
-    MATERIAL_1000, MATERIAL_0100, MATERIAL_0010, MATERIAL_0001,
     MATERIAL_MAX
 };
 
@@ -45,13 +44,16 @@ struct material_st {
     int id;
     char *name;
     struct matblk_st {
-	GLfloat ambient[4];
-	GLfloat diffuse[4];
-	GLfloat specular[4];
-	GLfloat shininess;
+	GLfloat ambient[3];
 	GLfloat _pad1;
+	GLfloat diffuse[3];
+	GLfloat _pad2;
+	GLfloat specular[3];
+	GLfloat _pad3;
 	GLfloat texorigin[2];
 	GLfloat texsize[2];
+	GLfloat shininess;
+        GLfloat opacity;
     } matblk;
 
     struct texture_st *tex;

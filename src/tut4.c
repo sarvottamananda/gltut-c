@@ -367,10 +367,10 @@ void setuniforms_lightblk(void)
     struct lightblk_st *lblk = &(lights->lightblk);
     print_vec3("Amb", lblk->ambience);
     for (int i = 0; i < MAXLIGHTS; i++) {
-	print_vec3("Lt_pos", lblk->pos[i]);
+	print_vec3("Lt_pos", lblk->pos[i].xyz);
     }
     for (int i = 0; i < MAXLIGHTS; i++) {
-	print_vec3("Lt_em", lblk->emission[i]);
+	print_vec3("Lt_em", lblk->emission[i].rgb);
     }
     printf("N:%d\n", lblk->num);
 
@@ -591,9 +591,9 @@ void objects_init(void)
 	dl_search_and_insert(list_objects, light_obj[i]);
 
 	obj_abs_translate(light_obj[i],
-			  lights->lightblk.pos[i][0],
-			  lights->lightblk.pos[i][1],
-			  lights->lightblk.pos[i][2] - 0.01);
+			  lights->lightblk.pos[i].xyz[0],
+			  lights->lightblk.pos[i].xyz[1],
+			  lights->lightblk.pos[i].xyz[2] - 0.01);
 	obj_abs_scale(light_obj[i], 1.0, 1.0, 1.0);
 	obj_abs_rotate(light_obj[i], 1.0f, 1.0f, 1.0f, degtorad(0.0f));
     }

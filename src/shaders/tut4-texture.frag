@@ -5,12 +5,13 @@
 #define MAXLIGHTS 4
 
 layout (std140) uniform MaterialBlock {
-	vec4 ambient;
-	vec4 diffuse;
-	vec4 specular;
-	float shininess;
+	vec3 ambient;
+	vec3 diffuse;
+	vec3 specular;
         vec2 texorigin;
         vec2 texsize;
+	float shininess;
+	float opacity;
 } Material;
 
 layout (std140) uniform SceneBlock {
@@ -83,7 +84,7 @@ void main()
     //f_color.rgb = normalize(fnormal);
     //f_color.rgb = fnormal;
     //f_color.rgb = 0.2*fposition.xyz;
-    f_color.a = 1.0;
+    f_color.a = Material.opacity;
     //f_color.b = 0.0;
 
     //f_color.rg = Material.texsize.rg;
@@ -106,8 +107,8 @@ void main()
 
 #else
 
-    f_color.a = 1.0;
     f_color.rgb = shade(fposition.xyz, fnormal.xyz);
+    f_color.a = Material.opacity;
 
 #endif
 
