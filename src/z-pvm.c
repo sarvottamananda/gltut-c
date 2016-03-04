@@ -54,7 +54,7 @@ void pvm_compute_rotate_mat4(float mat[][4], float v[3], float alpha)
 }
 
 void pvm_compute_model_mat4(float res[][4], float tr[3],
-			      float sc[3], float rot[3], float rot_ang)
+			    float sc[3], float rot[3], float rot_ang)
 {
     float scale[4][4];
     float translate[4][4];
@@ -71,7 +71,7 @@ void pvm_compute_model_mat4(float res[][4], float tr[3],
 }
 
 void pvm_compute_view_mat4(float res[][4],
-			     float cpos[3], float ctgt[3], float up[3])
+			   float cpos[3], float ctgt[3], float up[3])
 {
     float zaxis[3];
     float yaxis[3];
@@ -99,9 +99,9 @@ void pvm_compute_view_mat4(float res[][4],
     res[1][2] = zaxis[1];
     res[2][2] = zaxis[2];
 
-    res[3][0] = - vec3_dot(xaxis, cpos);
-    res[3][1] = - vec3_dot(yaxis, cpos);
-    res[3][2] = - vec3_dot(zaxis, cpos);
+    res[3][0] = -vec3_dot(xaxis, cpos);
+    res[3][1] = -vec3_dot(yaxis, cpos);
+    res[3][2] = -vec3_dot(zaxis, cpos);
 
     res[0][3] = 0;
     res[1][3] = 0;
@@ -112,7 +112,7 @@ void pvm_compute_view_mat4(float res[][4],
 }
 
 void pvm_compute_proj_mat4(float res[][4], float fovy,
-			     float a, float n, float f)
+			   float a, float n, float f)
 {
     mat4_identity(res);
 

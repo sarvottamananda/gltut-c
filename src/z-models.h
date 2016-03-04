@@ -1,7 +1,6 @@
 #ifndef Z_MODELS_H_INCLUDED
 #define Z_MODELS_H_INCLUDED
 
-
 enum model_enum { MODEL_NONE, MODEL_POINT, MODEL_CUBE, MODEL_SQUARE,
     MODEL_MAX
 };
@@ -35,8 +34,7 @@ extern int mdl_get_vbo_offset(struct model_st *);
 extern struct model_st *mdl_get_std_model(int);
 
 extern struct model_st *mdl_create_checker_triangulated(int, int, float,
-							float, float,
-							float);
+							float, float, float);
 extern struct model_st *mdl_create_checker_stripped(int xnum, int ynum,
 						    float lx, float by,
 						    float rx, float ty);

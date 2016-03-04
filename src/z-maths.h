@@ -15,7 +15,6 @@ extern void vec3_add(float res[4], float[4], float[4]);
 extern void mat3_add(float res[3][3], float[3][3], float[3][3]);
 extern void mat4_add(float res[4][4], float[4][4], float[4][4]);
 
-
 extern void mat4_mult(float res[4][4], float[4][4], float[4][4]);
 extern void mat3_mult(float res[3][3], float[3][3], float[3][3]);
 
@@ -54,7 +53,6 @@ extern void mat4_copy(float[4][4], float[4][4]);
 extern void mat3_copy_mat4(float[3][3], float[4][4]);
 extern void mat4_copy_mat3(float[4][4], float[3][3]);
 
-
 extern void mat3_transpose(float[3][3], float[3][3]);
 extern void mat4_transpose(float[4][4], float[4][4]);
 
@@ -79,6 +77,5 @@ static inline float radtodeg(float rad)
 {
     return rad * 180.0f / M_PI;
 }
-
 
 #endif

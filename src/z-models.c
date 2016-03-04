@@ -218,8 +218,7 @@ static struct vbuf_st *vbuf_alloc(int vcnt)
 
 }
 
-struct vbuf_st *mdl_create_vbuf(int vcnt, float * v, float * vt,
-				float * vn)
+struct vbuf_st *mdl_create_vbuf(int vcnt, float *v, float *vt, float *vn)
 {
     struct vbuf_st *tmp = vbuf_alloc(vcnt);
 
@@ -393,10 +392,9 @@ struct model_st *mdl_create_checker_triangulated(int xnum, int ynum,
     float dx = 1.0f / xnum;
     float dy = 1.0f / ynum;
 
-    float(*vertices)[4] =
-	(float(*)[4]) malloc(sizeof(float) * 4 * vcount);
-    float(*tcoords)[2] = (float(*)[2]) malloc(sizeof(float) * 2 * vcount);
-    float(*normals)[3] = (float(*)[3]) malloc(sizeof(float) * 3 * vcount);
+    float (*vertices)[4] = (float (*)[4])malloc(sizeof(float) * 4 * vcount);
+    float (*tcoords)[2] = (float (*)[2])malloc(sizeof(float) * 2 * vcount);
+    float (*normals)[3] = (float (*)[3])malloc(sizeof(float) * 3 * vcount);
 
     int k = 0;
     for (int i = 0; i < xnum; i++) {
@@ -431,8 +429,8 @@ struct model_st *mdl_create_checker_triangulated(int xnum, int ynum,
 
     tmp->vcount = vcount;
     tmp->vbuf =
-	mdl_create_vbuf(vcount, (float *) vertices, (float *) tcoords,
-			(float *) normals);
+	mdl_create_vbuf(vcount, (float *)vertices, (float *)tcoords,
+			(float *)normals);
     tmp->draw_mode = GL_TRIANGLES;
     set_primitive_count(tmp, 1);
     tmp->start[0] = 0;
@@ -462,10 +460,9 @@ struct model_st *mdl_create_sphere_stripped(int cnum, int znum, float lx,
     double tc = M_PI * 2 / cnum;
     double tz = M_PI / znum;
 
-    float(*vertices)[4] =
-	(float(*)[4]) malloc(sizeof(float) * 4 * vcount);
-    float(*tcoords)[2] = (float(*)[2]) malloc(sizeof(float) * 2 * vcount);
-    float(*normals)[3] = (float(*)[3]) malloc(sizeof(float) * 3 * vcount);
+    float (*vertices)[4] = (float (*)[4])malloc(sizeof(float) * 4 * vcount);
+    float (*tcoords)[2] = (float (*)[2])malloc(sizeof(float) * 2 * vcount);
+    float (*normals)[3] = (float (*)[3])malloc(sizeof(float) * 3 * vcount);
 
     int k = 0;
     for (int j = 0; j < znum; j++) {
@@ -493,8 +490,8 @@ struct model_st *mdl_create_sphere_stripped(int cnum, int znum, float lx,
 
     tmp->vcount = vcount;
     tmp->vbuf =
-	mdl_create_vbuf(vcount, (float *) vertices, (float *) tcoords,
-			(float *) normals);
+	mdl_create_vbuf(vcount, (float *)vertices, (float *)tcoords,
+			(float *)normals);
 
     return tmp;
 }
@@ -583,10 +580,9 @@ struct model_st *mdl_create_checker_stripped(int xnum, int ynum,
     float dx = 1.0f / xnum;
     float dy = 1.0f / ynum;
 
-    float(*vertices)[4] =
-	(float(*)[4]) malloc(sizeof(float) * 4 * vcount);
-    float(*tcoords)[2] = (float(*)[2]) malloc(sizeof(float) * 2 * vcount);
-    float(*normals)[3] = (float(*)[3]) malloc(sizeof(float) * 3 * vcount);
+    float (*vertices)[4] = (float (*)[4])malloc(sizeof(float) * 4 * vcount);
+    float (*tcoords)[2] = (float (*)[2])malloc(sizeof(float) * 2 * vcount);
+    float (*normals)[3] = (float (*)[3])malloc(sizeof(float) * 3 * vcount);
 
     int k = 0;
     for (int j = 0; j < ynum; j++) {
@@ -607,8 +603,8 @@ struct model_st *mdl_create_checker_stripped(int xnum, int ynum,
 
     tmp->vcount = vcount;
     tmp->vbuf =
-	mdl_create_vbuf(vcount, (float *) vertices, (float *) tcoords,
-			(float *) normals);
+	mdl_create_vbuf(vcount, (float *)vertices, (float *)tcoords,
+			(float *)normals);
 
     return tmp;
 }

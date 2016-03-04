@@ -339,11 +339,10 @@ void main_init(void)
     setvaos();
 
     pvm_compute_model_mat4(model_mat4, model_translate, model_scale,
-			     model_rotate_axis, model_rotate_angle);
+			   model_rotate_axis, model_rotate_angle);
     mat4_print("Model", model_mat4);
 
-    pvm_compute_view_mat4(view_mat4, camera_position, camera_target,
-			    camera_up);
+    pvm_compute_view_mat4(view_mat4, camera_position, camera_target, camera_up);
     mat4_print("View", view_mat4);
 
     pvm_compute_proj_mat4(proj_mat4, fovy, aspect, znear, zfar);

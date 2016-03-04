@@ -51,7 +51,7 @@ struct object_st *obj_create_object(char *name,
     }
 
     vec3_zero(tmp->translate);
-    vec3_set_1f(tmp->scale,1.0);
+    vec3_set_1f(tmp->scale, 1.0);
     vec3_zero(tmp->rotate_axis);
     tmp->rotate_angle = 0.0f;
 
@@ -99,8 +99,7 @@ void obj_abs_scale(struct object_st *obj, float x, float y, float z)
     obj->scale[2] = z;
 }
 
-void obj_abs_rotate(struct object_st *obj, float x, float y, float z,
-		    float a)
+void obj_abs_rotate(struct object_st *obj, float x, float y, float z, float a)
 {
     obj->rotate_axis[0] = x;
     obj->rotate_axis[1] = y;
@@ -126,8 +125,8 @@ void obj_set_modelblk_size(struct object_st *obj, int sz)
 void obj_compute_model_mat4(struct object_st *obj)
 {
     pvm_compute_model_mat4(obj->modelblk.modelmat,
-			     obj->translate,
-			     obj->scale, obj->rotate_axis, obj->rotate_angle);
+			   obj->translate,
+			   obj->scale, obj->rotate_axis, obj->rotate_angle);
 }
 
 void obj_compute_normal_mat4(struct object_st *obj)

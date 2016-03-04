@@ -9,14 +9,14 @@ struct light_st {
     struct lightblk_st {
 	GLfloat ambience[3];
 	GLfloat _pad;
-        struct emission_st {
-            GLfloat rgb[3];
-            GLfloat _pad;
-        } emission[MAXLIGHTS];
-        struct pos_st {
-            GLfloat xyz[3];
-            GLfloat _pad;
-        } pos[MAXLIGHTS];
+	struct emission_st {
+	    GLfloat rgb[3];
+	    GLfloat _pad;
+	} emission[MAXLIGHTS];
+	struct pos_st {
+	    GLfloat xyz[3];
+	    GLfloat _pad;
+	} pos[MAXLIGHTS];
 	GLuint num;
     } lightblk;
 

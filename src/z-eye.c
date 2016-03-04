@@ -39,7 +39,7 @@ float eye_set_fovy(struct scene_st *sc, float val)
     return oldval;
 }
 
-float eye_set_aspect(struct scene_st * sc, float val)
+float eye_set_aspect(struct scene_st *sc, float val)
 {
     float oldval;
 
@@ -48,7 +48,7 @@ float eye_set_aspect(struct scene_st * sc, float val)
     return oldval;
 }
 
-float eye_set_znear(struct scene_st * sc, float val)
+float eye_set_znear(struct scene_st *sc, float val)
 {
     float oldval;
 
@@ -57,7 +57,7 @@ float eye_set_znear(struct scene_st * sc, float val)
     return oldval;
 }
 
-float eye_set_zfar(struct scene_st * sc, float val)
+float eye_set_zfar(struct scene_st *sc, float val)
 {
     float oldval;
 
@@ -105,14 +105,13 @@ void eye_reset(struct scene_st *sc)
 void eye_compute_proj_mat4(struct scene_st *sc)
 {
     pvm_compute_proj_mat4(sc->sceneblk.projmat, sc->eye_fovy,
-			    sc->eye_aspect, sc->eye_znear,
-			    sc->eye_zfar);
+			  sc->eye_aspect, sc->eye_znear, sc->eye_zfar);
 
 }
 
 void eye_compute_view_mat4(struct scene_st *sc)
 {
     pvm_compute_view_mat4(sc->sceneblk.viewmat,
-			    sc->sceneblk.eye_position,
-			    sc->sceneblk.eye_target, sc->sceneblk.eye_up);
+			  sc->sceneblk.eye_position,
+			  sc->sceneblk.eye_target, sc->sceneblk.eye_up);
 }

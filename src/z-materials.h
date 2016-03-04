@@ -53,7 +53,7 @@ struct material_st {
 	GLfloat texorigin[2];
 	GLfloat texsize[2];
 	GLfloat shininess;
-        GLfloat opacity;
+	GLfloat opacity;
     } matblk;
 
     struct texture_st *tex;

@@ -85,8 +85,7 @@ void mtrl_set_name(struct material_st *m, char *name)
     m->name = strdup(name);
 }
 
-void mtrl_set_ambient(struct material_st *m, float r, float g, float b,
-		      float a)
+void mtrl_set_ambient(struct material_st *m, float r, float g, float b, float a)
 {
     m->matblk.ambient[0] = r;
     m->matblk.ambient[1] = g;
@@ -94,8 +93,7 @@ void mtrl_set_ambient(struct material_st *m, float r, float g, float b,
     m->matblk.ambient[3] = a;
 }
 
-void mtrl_set_diffuse(struct material_st *m, float r, float g, float b,
-		      float a)
+void mtrl_set_diffuse(struct material_st *m, float r, float g, float b, float a)
 {
     m->matblk.diffuse[0] = r;
     m->matblk.diffuse[1] = g;
@@ -129,13 +127,13 @@ void color_init(void)
 {
     num_std_colors = COLOR_MAX;
 
-    std_color = (float **) malloc(sizeof(float *) * num_std_colors);
+    std_color = (float **)malloc(sizeof(float *) * num_std_colors);
     if (std_color == NULL) {
 	perror("Cannot allocate memory for std_color");
 	exit(EXIT_FAILURE);
     }
     for (int i = 0; i < num_std_colors; i++) {
-	std_color[i] = (float *) malloc(sizeof(float) * 4);
+	std_color[i] = (float *)malloc(sizeof(float) * 4);
 	if (std_color[i] == NULL) {
 	    perror("Cannot allocate memory for std_color[i]");
 	    exit(EXIT_FAILURE);

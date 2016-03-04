@@ -155,8 +155,8 @@ void mat4_transpose(float res[][4], float a[][4])
     float tmp;
 
     for (int j = 0; j < 4; j++) {
-	    res[j][j] = a[j][j];
-	for (int i = j+1; i < 4; i++) {
+	res[j][j] = a[j][j];
+	for (int i = j + 1; i < 4; i++) {
 	    tmp = a[i][j];
 	    res[i][j] = a[j][i];
 	    res[j][i] = tmp;
