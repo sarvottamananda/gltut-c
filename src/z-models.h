@@ -1,8 +1,6 @@
 #ifndef Z_MODELS_H_INCLUDED
 #define Z_MODELS_H_INCLUDED
 
-#include "z-geom.h"
-#include "z-list.h"
 
 enum model_enum { MODEL_NONE, MODEL_POINT, MODEL_CUBE, MODEL_SQUARE,
     MODEL_MAX
@@ -12,39 +10,41 @@ struct model_st {
     unsigned int id;
     char *name;
 
-    GLint vbo_offset;
-    GLint *vbo_start;
+    int vbo_offset;
+    int *vbo_start;
 
-    GLint draw_mode;
-    GLint *start;
-    GLint *count;
-    GLint num;
+    int draw_mode;
+    int *start;
+    int *count;
+    int num;
 
     unsigned int vcount;
 
     struct vbuf_st {
-	GLfloat v[4];
-	GLfloat vt[2];
-	GLfloat vn[3];
+	float v[4];
+	float vt[2];
+	float vn[3];
     } *vbuf;
 
 };
 
-extern void mdl_set_vbo_offset(struct model_st *, GLint);
-extern void mdl_set_vbo_start(struct model_st *model, GLint offset);
-extern GLint mdl_get_vbo_offset(struct model_st *);
+extern void mdl_set_vbo_offset(struct model_st *, int);
+extern void mdl_set_vbo_start(struct model_st *model, int offset);
+extern int mdl_get_vbo_offset(struct model_st *);
 
 extern struct model_st *mdl_get_std_model(int);
 
-extern struct model_st *mdl_create_checker_triangulated(int, int, GLfloat,
-							GLfloat, GLfloat,
-							GLfloat);
+extern struct model_st *mdl_create_checker_triangulated(int, int, float,
+							float, float,
+							float);
 extern struct model_st *mdl_create_checker_stripped(int xnum, int ynum,
-						    GLfloat lx, GLfloat by,
-						    GLfloat rx, GLfloat ty);
+						    float lx, float by,
+						    float rx, float ty);
 extern struct model_st *mdl_create_sphere_stripped(int cnum, int znum,
-						   GLfloat lx, GLfloat rx,
-						   GLfloat by, GLfloat ty);
+						   float lx, float rx,
+						   float by, float ty);
+
+struct geom_model_st;
 
 extern struct model_st *mdl_create_model_from_geom(char *name, struct geom_model_st
 						   *geom);

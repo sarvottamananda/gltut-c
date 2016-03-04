@@ -6,14 +6,14 @@
 
 #include "z-geom.h"
 #include "z-models.h"
-#include "z-mat.h"
+#include "z-maths.h"
 #include "debug.h"
 
 // Data for a cube
 
 int cube_vcount = 36;
 
-GLfloat cube_vertices[] = {
+float cube_vertices[] = {
     0.0f, 0.0f, 1.0f, 1.0f,
     1.0f, 0.0f, 1.0f, 1.0f,
     0.0f, 1.0f, 1.0f, 1.0f,
@@ -63,7 +63,7 @@ GLfloat cube_vertices[] = {
     0.0f, 1.0f, 1.0f, 1.0f,
 };
 
-GLfloat cube_normals[] = {
+float cube_normals[] = {
     0.0f, 0.0f, 1.0f,
     0.0f, 0.0f, 1.0f,
     0.0f, 0.0f, 1.0f,
@@ -113,7 +113,7 @@ GLfloat cube_normals[] = {
     -1.0f, 0.0f, 0.0f,
 };
 
-GLfloat cube_tcoords[] = {
+float cube_tcoords[] = {
     0.0f, 0.0f,
     1.0f, 0.0f,
     0.0f, 1.0f,
@@ -165,7 +165,7 @@ GLfloat cube_tcoords[] = {
 
 GLint square_vcount = 6;
 
-GLfloat square_vertices[] = {
+float square_vertices[] = {
     0.0f, 0.0f, 1.0f, 1.0f,
     1.0f, 0.0f, 1.0f, 1.0f,
     0.0f, 1.0f, 1.0f, 1.0f,
@@ -175,7 +175,7 @@ GLfloat square_vertices[] = {
     1.0f, 1.0f, 1.0f, 1.0f,
 };
 
-GLfloat square_normals[] = {
+float square_normals[] = {
     0.0f, 0.0f, 1.0f,
     0.0f, 0.0f, 1.0f,
     0.0f, 0.0f, 1.0f,
@@ -185,7 +185,7 @@ GLfloat square_normals[] = {
     0.0f, 0.0f, 1.0f,
 };
 
-GLfloat square_tcoords[] = {
+float square_tcoords[] = {
     0.0f, 0.0f,
     1.0f, 0.0f,
     0.0f, 1.0f,
@@ -195,9 +195,9 @@ GLfloat square_tcoords[] = {
     1.0f, 1.0f,
 };
 
-GLfloat point_vertices[] = { 0.0f, 0.0f, 0.0f, 1.0f };
-GLfloat point_normals[] = { 0.0f, 0.0f, 1.0f };
-GLfloat point_tcoords[] = { 0.0f, 0.0f };
+float point_vertices[] = { 0.0f, 0.0f, 0.0f, 1.0f };
+float point_normals[] = { 0.0f, 0.0f, 1.0f };
+float point_tcoords[] = { 0.0f, 0.0f };
 
 struct model_st *std_model = NULL;
 
@@ -218,15 +218,15 @@ static struct vbuf_st *vbuf_alloc(int vcnt)
 
 }
 
-struct vbuf_st *mdl_create_vbuf(int vcnt, GLfloat * v, GLfloat * vt,
-				GLfloat * vn)
+struct vbuf_st *mdl_create_vbuf(int vcnt, float * v, float * vt,
+				float * vn)
 {
     struct vbuf_st *tmp = vbuf_alloc(vcnt);
 
     for (int i = 0; i < vcnt; i++) {
-	copy_vec4(tmp[i].v, &(v[4 * i]));
-	copy_vec2(tmp[i].vt, &(vt[2 * i]));
-	copy_vec3(tmp[i].vn, &(vn[3 * i]));
+	vec4_copy(tmp[i].v, &(v[4 * i]));
+	vec2_copy(tmp[i].vt, &(vt[2 * i]));
+	vec3_copy(tmp[i].vn, &(vn[3 * i]));
     }
     return tmp;
 }
@@ -347,16 +347,16 @@ struct model_st *mdl_get_std_model(int m)
 }
 
 /*
-void subdivide(GLfloat u1[2], GLfloat u2[2], GLfloat u3[2],
-	       GLfloat cutoff, int depth,
-	       GLfloat(*curv) (GLfloat[2]),
-	       void (*surf) (GLfloat[2], GLfloat *, GLfloat *, GLfloat *)
+void subdivide(float u1[2], float u2[2], float u3[2],
+	       float cutoff, int depth,
+	       float(*curv) (float[2]),
+	       void (*surf) (float[2], float *, float *, float *)
     )
 {
-    GLfloat v1[3], v2[3], v3[3];
-    GLfloat n1[3], n2[3], n3[3];
-    GLfloat t1[2], t2[2], t3[2];
-    GLfloat u12[2], u23[2], u31[2];
+    float v1[3], v2[3], v3[3];
+    float n1[3], n2[3], n3[3];
+    float t1[2], t2[2], t3[2];
+    float u12[2], u23[2], u31[2];
     GLint i;
 
     if (depth == 0 || ((*curv) (u1) < cutoff &&
@@ -379,8 +379,8 @@ void subdivide(GLfloat u1[2], GLfloat u2[2], GLfloat u3[2],
 */
 
 struct model_st *mdl_create_checker_triangulated(int xnum, int ynum,
-						 GLfloat lx, GLfloat rx,
-						 GLfloat by, GLfloat ty)
+						 float lx, float rx,
+						 float by, float ty)
 {
     struct model_st *tmp;
 
@@ -390,40 +390,40 @@ struct model_st *mdl_create_checker_triangulated(int xnum, int ynum,
 
     int vcount = 6 * xnum * ynum;
 
-    GLfloat dx = 1.0f / xnum;
-    GLfloat dy = 1.0f / ynum;
+    float dx = 1.0f / xnum;
+    float dy = 1.0f / ynum;
 
-    GLfloat(*vertices)[4] =
-	(GLfloat(*)[4]) malloc(sizeof(GLfloat) * 4 * vcount);
-    GLfloat(*tcoords)[2] = (GLfloat(*)[2]) malloc(sizeof(GLfloat) * 2 * vcount);
-    GLfloat(*normals)[3] = (GLfloat(*)[3]) malloc(sizeof(GLfloat) * 3 * vcount);
+    float(*vertices)[4] =
+	(float(*)[4]) malloc(sizeof(float) * 4 * vcount);
+    float(*tcoords)[2] = (float(*)[2]) malloc(sizeof(float) * 2 * vcount);
+    float(*normals)[3] = (float(*)[3]) malloc(sizeof(float) * 3 * vcount);
 
     int k = 0;
     for (int i = 0; i < xnum; i++) {
 	for (int j = 0; j < ynum; j++) {
-	    set_vec4(vertices[k], i * dx, j * dy, 0.0, 1.0);
-	    set_vec4(vertices[k + 1], (i + 1) * dx, j * dy, 0.0, 1.0);
-	    set_vec4(vertices[k + 2], i * dx, (j + 1) * dy, 0.0, 1.0);
+	    vec4_set(vertices[k], i * dx, j * dy, 0.0, 1.0);
+	    vec4_set(vertices[k + 1], (i + 1) * dx, j * dy, 0.0, 1.0);
+	    vec4_set(vertices[k + 2], i * dx, (j + 1) * dy, 0.0, 1.0);
 
-	    set_vec4(vertices[k + 3], i * dx, (j + 1) * dy, 0.0, 1.0);
-	    set_vec4(vertices[k + 4], (i + 1) * dx, j * dy, 0.0, 1.0);
-	    set_vec4(vertices[k + 5], (i + 1) * dx, (j + 1) * dy, 0.0, 1.0);
+	    vec4_set(vertices[k + 3], i * dx, (j + 1) * dy, 0.0, 1.0);
+	    vec4_set(vertices[k + 4], (i + 1) * dx, j * dy, 0.0, 1.0);
+	    vec4_set(vertices[k + 5], (i + 1) * dx, (j + 1) * dy, 0.0, 1.0);
 
-	    set_vec2(tcoords[k], lx, by);
-	    set_vec2(tcoords[k + 1], rx, by);
-	    set_vec2(tcoords[k + 2], lx, ty);
+	    vec2_set(tcoords[k], lx, by);
+	    vec2_set(tcoords[k + 1], rx, by);
+	    vec2_set(tcoords[k + 2], lx, ty);
 
-	    set_vec2(tcoords[k + 3], lx, ty);
-	    set_vec2(tcoords[k + 4], rx, by);
-	    set_vec2(tcoords[k + 5], rx, ty);
+	    vec2_set(tcoords[k + 3], lx, ty);
+	    vec2_set(tcoords[k + 4], rx, by);
+	    vec2_set(tcoords[k + 5], rx, ty);
 
-	    set_vec3(normals[k], 0.0, 0.0, 1.0);
-	    set_vec3(normals[k + 1], 0.0, 0.0, 1.0);
-	    set_vec3(normals[k + 2], 0.0, 0.0, 1.0);
+	    vec3_set(normals[k], 0.0, 0.0, 1.0);
+	    vec3_set(normals[k + 1], 0.0, 0.0, 1.0);
+	    vec3_set(normals[k + 2], 0.0, 0.0, 1.0);
 
-	    set_vec3(normals[k + 3], 0.0, 0.0, 1.0);
-	    set_vec3(normals[k + 4], 0.0, 0.0, 1.0);
-	    set_vec3(normals[k + 5], 0.0, 0.0, 1.0);
+	    vec3_set(normals[k + 3], 0.0, 0.0, 1.0);
+	    vec3_set(normals[k + 4], 0.0, 0.0, 1.0);
+	    vec3_set(normals[k + 5], 0.0, 0.0, 1.0);
 
 	    k += 6;
 	}
@@ -431,8 +431,8 @@ struct model_st *mdl_create_checker_triangulated(int xnum, int ynum,
 
     tmp->vcount = vcount;
     tmp->vbuf =
-	mdl_create_vbuf(vcount, (GLfloat *) vertices, (GLfloat *) tcoords,
-			(GLfloat *) normals);
+	mdl_create_vbuf(vcount, (float *) vertices, (float *) tcoords,
+			(float *) normals);
     tmp->draw_mode = GL_TRIANGLES;
     set_primitive_count(tmp, 1);
     tmp->start[0] = 0;
@@ -441,8 +441,8 @@ struct model_st *mdl_create_checker_triangulated(int xnum, int ynum,
     return tmp;
 }
 
-struct model_st *mdl_create_sphere_stripped(int cnum, int znum, GLfloat lx,
-					    GLfloat rx, GLfloat by, GLfloat ty)
+struct model_st *mdl_create_sphere_stripped(int cnum, int znum, float lx,
+					    float rx, float by, float ty)
 {
     struct model_st *tmp;
 
@@ -462,10 +462,10 @@ struct model_st *mdl_create_sphere_stripped(int cnum, int znum, GLfloat lx,
     double tc = M_PI * 2 / cnum;
     double tz = M_PI / znum;
 
-    GLfloat(*vertices)[4] =
-	(GLfloat(*)[4]) malloc(sizeof(GLfloat) * 4 * vcount);
-    GLfloat(*tcoords)[2] = (GLfloat(*)[2]) malloc(sizeof(GLfloat) * 2 * vcount);
-    GLfloat(*normals)[3] = (GLfloat(*)[3]) malloc(sizeof(GLfloat) * 3 * vcount);
+    float(*vertices)[4] =
+	(float(*)[4]) malloc(sizeof(float) * 4 * vcount);
+    float(*tcoords)[2] = (float(*)[2]) malloc(sizeof(float) * 2 * vcount);
+    float(*normals)[3] = (float(*)[3]) malloc(sizeof(float) * 3 * vcount);
 
     int k = 0;
     for (int j = 0; j < znum; j++) {
@@ -473,18 +473,18 @@ struct model_st *mdl_create_sphere_stripped(int cnum, int znum, GLfloat lx,
 	    double cz = cos(j * tz - M_PI / 2);
 	    double cz1 = cos((j + 1) * tz - M_PI / 2);
 
-	    set_vec4(vertices[k], cos(i * tc) * cz, sin(i * tc) * cz,
+	    vec4_set(vertices[k], cos(i * tc) * cz, sin(i * tc) * cz,
 		     sin(j * tz - M_PI / 2), 1.0);
-	    set_vec4(vertices[k + 1], cos(i * tc) * cz1, sin(i * tc) * cz1,
+	    vec4_set(vertices[k + 1], cos(i * tc) * cz1, sin(i * tc) * cz1,
 		     sin((j + 1) * tz - M_PI / 2), 1.0);
 
-	    set_vec2(tcoords[k], lx + i * (rx - lx), by + j * (ty - by));
-	    set_vec2(tcoords[k + 1], lx + i * (rx - lx),
+	    vec2_set(tcoords[k], lx + i * (rx - lx), by + j * (ty - by));
+	    vec2_set(tcoords[k + 1], lx + i * (rx - lx),
 		     by + (j + 1) * (ty - by));
 
-	    set_vec3(normals[k], cos(i * tc) * cz, sin(i * tc) * cz,
+	    vec3_set(normals[k], cos(i * tc) * cz, sin(i * tc) * cz,
 		     sin(j * tz - M_PI / 2));
-	    set_vec3(normals[k + 1], cos(i * tc) * cz1, sin(i * tc) * cz1,
+	    vec3_set(normals[k + 1], cos(i * tc) * cz1, sin(i * tc) * cz1,
 		     sin((j + 1) * tz - M_PI / 2));
 
 	    k += 2;
@@ -493,8 +493,8 @@ struct model_st *mdl_create_sphere_stripped(int cnum, int znum, GLfloat lx,
 
     tmp->vcount = vcount;
     tmp->vbuf =
-	mdl_create_vbuf(vcount, (GLfloat *) vertices, (GLfloat *) tcoords,
-			(GLfloat *) normals);
+	mdl_create_vbuf(vcount, (float *) vertices, (float *) tcoords,
+			(float *) normals);
 
     return tmp;
 }
@@ -523,9 +523,9 @@ struct model_st *mdl_create_model_from_geom(char *name,
 	tmp->count[f] = vcount;
 
 	for (int v = 0; v < geom->fn[f]; v++) {
-	    copy_vec4(vbuf[off + v].v, geom->v[geom->fv[f][v]]);
-	    copy_vec2(vbuf[off + v].vt, geom->vt[geom->fvt[f][v]]);
-	    copy_vec3(vbuf[off + v].vn, geom->vn[geom->fvn[f][v]]);
+	    vec4_copy(vbuf[off + v].v, geom->v[geom->fv[f][v]]);
+	    vec2_copy(vbuf[off + v].vt, geom->vt[geom->fvt[f][v]]);
+	    vec3_copy(vbuf[off + v].vn, geom->vn[geom->fvn[f][v]]);
 	}
 
 	off += geom->fn[f];
@@ -562,8 +562,8 @@ void mdl_print(struct model_st *mdl)
 }
 
 struct model_st *mdl_create_checker_stripped(int xnum, int ynum,
-					     GLfloat lx, GLfloat rx,
-					     GLfloat by, GLfloat ty)
+					     float lx, float rx,
+					     float by, float ty)
 {
     struct model_st *tmp;
 
@@ -580,26 +580,26 @@ struct model_st *mdl_create_checker_stripped(int xnum, int ynum,
 	tmp->count[i] = 2 * (xnum + 1);
     }
 
-    GLfloat dx = 1.0f / xnum;
-    GLfloat dy = 1.0f / ynum;
+    float dx = 1.0f / xnum;
+    float dy = 1.0f / ynum;
 
-    GLfloat(*vertices)[4] =
-	(GLfloat(*)[4]) malloc(sizeof(GLfloat) * 4 * vcount);
-    GLfloat(*tcoords)[2] = (GLfloat(*)[2]) malloc(sizeof(GLfloat) * 2 * vcount);
-    GLfloat(*normals)[3] = (GLfloat(*)[3]) malloc(sizeof(GLfloat) * 3 * vcount);
+    float(*vertices)[4] =
+	(float(*)[4]) malloc(sizeof(float) * 4 * vcount);
+    float(*tcoords)[2] = (float(*)[2]) malloc(sizeof(float) * 2 * vcount);
+    float(*normals)[3] = (float(*)[3]) malloc(sizeof(float) * 3 * vcount);
 
     int k = 0;
     for (int j = 0; j < ynum; j++) {
 	for (int i = 0; i < xnum + 1; i++) {
-	    set_vec4(vertices[k], i * dx, j * dy, 0.0, 1.0);
-	    set_vec4(vertices[k + 1], i * dx, (j + 1) * dy, 0.0, 1.0);
+	    vec4_set(vertices[k], i * dx, j * dy, 0.0, 1.0);
+	    vec4_set(vertices[k + 1], i * dx, (j + 1) * dy, 0.0, 1.0);
 
-	    set_vec2(tcoords[k], lx + i * (rx - lx), by + j * (ty - by));
-	    set_vec2(tcoords[k + 1], lx + i * (rx - lx),
+	    vec2_set(tcoords[k], lx + i * (rx - lx), by + j * (ty - by));
+	    vec2_set(tcoords[k + 1], lx + i * (rx - lx),
 		     by + (j + 1) * (ty - by));
 
-	    set_vec3(normals[k], 0.0, 0.0, 1.0);
-	    set_vec3(normals[k + 1], 0.0, 0.0, 1.0);
+	    vec3_set(normals[k], 0.0, 0.0, 1.0);
+	    vec3_set(normals[k + 1], 0.0, 0.0, 1.0);
 
 	    k += 2;
 	}
@@ -607,8 +607,8 @@ struct model_st *mdl_create_checker_stripped(int xnum, int ynum,
 
     tmp->vcount = vcount;
     tmp->vbuf =
-	mdl_create_vbuf(vcount, (GLfloat *) vertices, (GLfloat *) tcoords,
-			(GLfloat *) normals);
+	mdl_create_vbuf(vcount, (float *) vertices, (float *) tcoords,
+			(float *) normals);
 
     return tmp;
 }

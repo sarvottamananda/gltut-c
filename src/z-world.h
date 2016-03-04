@@ -37,8 +37,8 @@ extern void obj_set_material(struct object_st *, int);
 extern void obj_set_modelblk_offset(struct object_st *, int);
 extern void obj_set_modelblk_size(struct object_st *, int);
 
-extern void calculate_model_mat4(struct object_st *);
-extern void calculate_normal_mat4(struct object_st *);
+extern void obj_compute_model_mat4(struct object_st *);
+extern void obj_compute_normal_mat4(struct object_st *);
 
 extern struct object_st *obj_create_object(char *, struct model_st *,
 					   struct material_st *);

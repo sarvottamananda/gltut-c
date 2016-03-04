@@ -8,10 +8,11 @@
 #include "z-png.h"
 #include "z-models.h"
 #include "z-materials.h"
-#include "z-camera.h"
+#include "z-eye.h"
 #include "z-world.h"
-#include "z-mat.h"
+#include "z-maths.h"
 #include "z-light.h"
+#include "z-list.h"
 
 #include "debug.h"
 
@@ -141,7 +142,7 @@ void setvaos(void)
 
     // Give our vertices to OpenGL.
     glBufferData(GL_ARRAY_BUFFER,
-		 sizeof(GLfloat) * (4 + 2 + 3) * vcount, NULL, GL_STATIC_DRAW);
+		 sizeof(float) * (4 + 2 + 3) * vcount, NULL, GL_STATIC_DRAW);
 
     GLint offset = 0;
     GLint cnt = 0;
@@ -170,12 +171,12 @@ void setvaos(void)
     if (tc_loc >= 0)
 	glVertexAttribPointer(tc_loc, 2, GL_FLOAT, GL_FALSE,
 			      sizeof(struct vbuf_st),
-			      BUFFER_OFFSET(4 * sizeof(GLfloat)));
+			      BUFFER_OFFSET(4 * sizeof(float)));
 
     if (normal_loc >= 0)
 	glVertexAttribPointer(normal_loc, 3, GL_FLOAT, GL_FALSE,
 			      sizeof(struct vbuf_st),
-			      BUFFER_OFFSET(6 * sizeof(GLfloat)));
+			      BUFFER_OFFSET(6 * sizeof(float)));
 
     if (position_loc >= 0)
 	glEnableVertexAttribArray(position_loc);
@@ -211,8 +212,8 @@ void setuniforms_modelblk(void)
     for (ol = list_objects->first; ol != NULL; ol = ol->next) {
 	struct object_st *obj = ol->data;
 
-	calculate_model_mat4(obj);
-	calculate_normal_mat4(obj);
+	obj_compute_model_mat4(obj);
+	obj_compute_normal_mat4(obj);
 
 	if (modelblk_offset % UniformBufferOffset != 0) {
 	    modelblk_offset +=
@@ -250,8 +251,8 @@ void setuniforms_sceneblk(void)
     // Camera specific
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_scene);
 
-    calculate_view_mat4(sc);
-    calculate_proj_mat4(sc);
+    eye_compute_view_mat4(sc);
+    eye_compute_proj_mat4(sc);
 
     sceneblk_sz = sizeof(sc->sceneblk);
     GLint realblk_sz = sceneblk_sz;
@@ -269,8 +270,8 @@ void setuniforms_sceneblk(void)
     sc->sceneblk_size = sceneblk_sz;
     sc->sceneblk_offset = sceneblk_offset;
 
-    print_mat4("View Mat4", sc->sceneblk.viewmat);
-    print_mat4("Projection Mat4", sc->sceneblk.projmat);
+    mat4_print("View Mat4", sc->sceneblk.viewmat);
+    mat4_print("Projection Mat4", sc->sceneblk.projmat);
 
     glBufferSubData(GL_UNIFORM_BUFFER, sceneblk_offset, sceneblk_sz,
 		    &(sc->sceneblk));
@@ -365,12 +366,12 @@ void setuniforms_lightblk(void)
     int lightblk_offset = 0;
 
     struct lightblk_st *lblk = &(lights->lightblk);
-    print_vec3("Amb", lblk->ambience);
+    vec3_print("Amb", lblk->ambience);
     for (int i = 0; i < MAXLIGHTS; i++) {
-	print_vec3("Lt_pos", lblk->pos[i].xyz);
+	vec3_print("Lt_pos", lblk->pos[i].xyz);
     }
     for (int i = 0; i < MAXLIGHTS; i++) {
-	print_vec3("Lt_em", lblk->emission[i].rgb);
+	vec3_print("Lt_em", lblk->emission[i].rgb);
     }
     printf("N:%d\n", lblk->num);
 
@@ -611,8 +612,8 @@ void main_init(void)
     mdl_init();
     mtrl_init();
 
-    sc = camera_create_scene();
-    camera_init(sc);
+    sc = eye_create_scene();
+    eye_init(sc);
 
     lights = light_create_light();
     light_init(lights);

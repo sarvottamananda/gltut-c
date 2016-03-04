@@ -4,12 +4,12 @@
 #include <GL/glew.h>
 
 #include "z-materials.h"
-#include "z-mat.h"
+#include "z-maths.h"
 
 struct material_st *std_material = NULL;
 int num_std_materials = 0;
 
-static GLfloat **std_color = NULL;
+static float **std_color = NULL;
 int num_std_colors = 0;
 
 static int id = 0;
@@ -31,9 +31,9 @@ static struct material_st black_mat = {
 
 void mtrl_copy(struct material_st *dst, struct material_st *src)
 {
-    copy_vec3(dst->matblk.ambient, src->matblk.ambient);
-    copy_vec3(dst->matblk.diffuse, src->matblk.diffuse);
-    copy_vec3(dst->matblk.specular, src->matblk.specular);
+    vec3_copy(dst->matblk.ambient, src->matblk.ambient);
+    vec3_copy(dst->matblk.diffuse, src->matblk.diffuse);
+    vec3_copy(dst->matblk.specular, src->matblk.specular);
     dst->matblk.shininess = src->matblk.shininess;
     dst->matblk.opacity = src->matblk.opacity;
     dst->tex = src->tex;
@@ -49,9 +49,9 @@ void mtrl_set_matblk_size(struct material_st *m, int sz)
     m->matblk_size = sz;
 }
 
-void mtrl_get_std_color(GLfloat c[], int color)
+void mtrl_get_std_color(float c[], int color)
 {
-    copy_vec4(c, std_color[color]);
+    vec4_copy(c, std_color[color]);
 }
 
 struct material_st *mtrl_new_material(int num)
@@ -85,8 +85,8 @@ void mtrl_set_name(struct material_st *m, char *name)
     m->name = strdup(name);
 }
 
-void mtrl_set_ambient(struct material_st *m, GLfloat r, GLfloat g, GLfloat b,
-		      GLfloat a)
+void mtrl_set_ambient(struct material_st *m, float r, float g, float b,
+		      float a)
 {
     m->matblk.ambient[0] = r;
     m->matblk.ambient[1] = g;
@@ -94,8 +94,8 @@ void mtrl_set_ambient(struct material_st *m, GLfloat r, GLfloat g, GLfloat b,
     m->matblk.ambient[3] = a;
 }
 
-void mtrl_set_diffuse(struct material_st *m, GLfloat r, GLfloat g, GLfloat b,
-		      GLfloat a)
+void mtrl_set_diffuse(struct material_st *m, float r, float g, float b,
+		      float a)
 {
     m->matblk.diffuse[0] = r;
     m->matblk.diffuse[1] = g;
@@ -103,8 +103,8 @@ void mtrl_set_diffuse(struct material_st *m, GLfloat r, GLfloat g, GLfloat b,
     m->matblk.diffuse[3] = a;
 }
 
-void mtrl_set_specular(struct material_st *m, GLfloat r, GLfloat g, GLfloat b,
-		       GLfloat a)
+void mtrl_set_specular(struct material_st *m, float r, float g, float b,
+		       float a)
 {
     m->matblk.specular[0] = r;
     m->matblk.specular[1] = g;
@@ -112,12 +112,12 @@ void mtrl_set_specular(struct material_st *m, GLfloat r, GLfloat g, GLfloat b,
     m->matblk.specular[3] = a;
 }
 
-void mtrl_set_shininess(struct material_st *m, GLfloat s)
+void mtrl_set_shininess(struct material_st *m, float s)
 {
     m->matblk.shininess = s;
 }
 
-void color_set(GLfloat res[], GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+void color_set(float res[], float r, float g, float b, float a)
 {
     res[0] = r;
     res[1] = g;
@@ -129,13 +129,13 @@ void color_init(void)
 {
     num_std_colors = COLOR_MAX;
 
-    std_color = (GLfloat **) malloc(sizeof(GLfloat *) * num_std_colors);
+    std_color = (float **) malloc(sizeof(float *) * num_std_colors);
     if (std_color == NULL) {
 	perror("Cannot allocate memory for std_color");
 	exit(EXIT_FAILURE);
     }
     for (int i = 0; i < num_std_colors; i++) {
-	std_color[i] = (GLfloat *) malloc(sizeof(GLfloat) * 4);
+	std_color[i] = (float *) malloc(sizeof(float) * 4);
 	if (std_color[i] == NULL) {
 	    perror("Cannot allocate memory for std_color[i]");
 	    exit(EXIT_FAILURE);
@@ -195,77 +195,77 @@ void mtrl_init(void)
     std_material = mtrl_new_material(num_std_materials);
 
     int mat = 0;
-    GLfloat color[4];
+    float color[4];
 
     mat = MATERIAL_NONE;
     mtrl_get_std_color(color, COLOR_NONE);
     mtrl_copy(&(std_material[mat]), &black_mat);
-    copy_vec3(std_material[mat].matblk.ambient, color);
-    copy_vec3(std_material[mat].matblk.diffuse, color);
+    vec3_copy(std_material[mat].matblk.ambient, color);
+    vec3_copy(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("none");
 
     mat = MATERIAL_WHITE;
     mtrl_get_std_color(color, COLOR_WHITE);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec3(std_material[mat].matblk.ambient, color);
-    copy_vec3(std_material[mat].matblk.diffuse, color);
+    vec3_copy(std_material[mat].matblk.ambient, color);
+    vec3_copy(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("white");
 
     mat = MATERIAL_BLACK;
     mtrl_get_std_color(color, COLOR_BLACK);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec3(std_material[mat].matblk.ambient, color);
-    copy_vec3(std_material[mat].matblk.diffuse, color);
+    vec3_copy(std_material[mat].matblk.ambient, color);
+    vec3_copy(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("black");
 
     mat = MATERIAL_RED;
     mtrl_get_std_color(color, COLOR_RED);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec3(std_material[mat].matblk.ambient, color);
-    copy_vec3(std_material[mat].matblk.diffuse, color);
+    vec3_copy(std_material[mat].matblk.ambient, color);
+    vec3_copy(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("red");
 
     mat = MATERIAL_BLUE;
     mtrl_get_std_color(color, COLOR_BLUE);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec3(std_material[mat].matblk.ambient, color);
-    copy_vec3(std_material[mat].matblk.diffuse, color);
+    vec3_copy(std_material[mat].matblk.ambient, color);
+    vec3_copy(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("blue");
 
     mat = MATERIAL_GREEN;
     mtrl_get_std_color(color, COLOR_GREEN);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec3(std_material[mat].matblk.ambient, color);
-    copy_vec3(std_material[mat].matblk.diffuse, color);
+    vec3_copy(std_material[mat].matblk.ambient, color);
+    vec3_copy(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("green");
 
     mat = MATERIAL_YELLOW;
     mtrl_get_std_color(color, COLOR_YELLOW);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec3(std_material[mat].matblk.ambient, color);
-    copy_vec3(std_material[mat].matblk.diffuse, color);
+    vec3_copy(std_material[mat].matblk.ambient, color);
+    vec3_copy(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("yellow");
 
     mat = MATERIAL_MAGENTA;
     mtrl_get_std_color(color, COLOR_MAGENTA);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec3(std_material[mat].matblk.ambient, color);
-    copy_vec3(std_material[mat].matblk.diffuse, color);
+    vec3_copy(std_material[mat].matblk.ambient, color);
+    vec3_copy(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("magenta");
 
     mat = MATERIAL_CYAN;
     mtrl_get_std_color(color, COLOR_CYAN);
     mtrl_copy(&std_material[mat], &black_mat);
-    copy_vec3(std_material[mat].matblk.ambient, color);
-    copy_vec3(std_material[mat].matblk.diffuse, color);
+    vec3_copy(std_material[mat].matblk.ambient, color);
+    vec3_copy(std_material[mat].matblk.diffuse, color);
     std_material[mat].id = mat;
     std_material[mat].name = strdup("cyan");
 
@@ -278,8 +278,8 @@ struct material_st *mtrl_get_std_material(int material)
     return &(std_material[material]);
 };
 
-void mtrl_set_texcoords(struct material_st *m, GLfloat ox, GLfloat oy,
-			GLfloat sx, GLfloat sy)
+void mtrl_set_texcoords(struct material_st *m, float ox, float oy,
+			float sx, float sy)
 {
 
     // m->matblk.dummy_1[0] = 1.0;
