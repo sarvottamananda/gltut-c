@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <GL/glew.h>
 
 #include "z-light.h"
 #include "z-maths.h"

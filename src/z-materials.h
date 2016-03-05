@@ -1,8 +1,6 @@
 #ifndef Z_MATERIALS_H_INCLUDED
 #define Z_MATERIALS_H_INCLUDED
 
-#include "z-tex.h"
-
 enum material_enum {
     MATERIAL_NONE, MATERIAL_WHITE, MATERIAL_BLACK,
     MATERIAL_RED, MATERIAL_GREEN, MATERIAL_BLUE,
@@ -40,6 +38,8 @@ enum color_type_en {
     COLOR_TYPE_MAX
 };
 
+struct texture_st;
+
 struct material_st {
     int id;
     char *name;
@@ -65,22 +65,22 @@ struct material_st {
 extern struct material_st *mtrl_get_std_material(int);
 extern void mtrl_set_matblk_offset(struct material_st *, int);
 extern void mtrl_set_matblk_size(struct material_st *, int);
-extern void mtrl_get_std_color(GLfloat[], int);
+extern void mtrl_get_std_color(float[], int);
 
 extern struct material_st *mtrl_new_material(int);
 extern void mtrl_delete_material(struct material_st *);
-extern void mtrl_set_texcoords(struct material_st *, GLfloat, GLfloat,
-			       GLfloat, GLfloat);
+extern void mtrl_set_texcoords(struct material_st *, float, float,
+			       float, float);
 extern void mtrl_set_name(struct material_st *m, char *name);
 
 extern void mtrl_copy(struct material_st *dst, struct material_st *src);
-extern void mtrl_set_ambient(struct material_st *m, GLfloat r, GLfloat g,
-			     GLfloat b, GLfloat a);
-extern void mtrl_set_diffuse(struct material_st *m, GLfloat r, GLfloat g,
-			     GLfloat b, GLfloat a);
-extern void mtrl_set_specular(struct material_st *m, GLfloat r, GLfloat g,
-			      GLfloat b, GLfloat a);
-extern void mtrl_set_shininess(struct material_st *m, GLfloat s);
+extern void mtrl_set_ambient(struct material_st *m, float r, float g,
+			     float b, float a);
+extern void mtrl_set_diffuse(struct material_st *m, float r, float g,
+			     float b, float a);
+extern void mtrl_set_specular(struct material_st *m, float r, float g,
+			      float b, float a);
+extern void mtrl_set_shininess(struct material_st *m, float s);
 
 extern void mtrl_init(void);
 

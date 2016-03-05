@@ -8,8 +8,8 @@ COMMON_FILES = a-defs.h \
 	z-gui.c z-glfw.c z-options.c z-util.c z-list.c \
 	z-png.h z-opengl.h z-shader.h z-pvm.h z-maths.h \
 	z-png.c z-opengl.c z-shader.c z-pvm.c z-maths.c \
-	z-eye.h z-models.h z-materials.h z-world.h z-light.h \
-	z-eye.c z-models.c z-materials.c z-world.c z-light.c \
+	z-camera.h z-models.h z-materials.h z-world.h z-light.h \
+	z-camera.c z-models.c z-materials.c z-world.c z-light.c \
 	z-geom.h \
 	z-geom.c \
 	a-main.c \

@@ -5,6 +5,7 @@
 
 #include "z-materials.h"
 #include "z-maths.h"
+#include "z-tex.h"
 
 struct material_st *std_material = NULL;
 int num_std_materials = 0;

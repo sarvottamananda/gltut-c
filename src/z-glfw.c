@@ -220,7 +220,11 @@ void glfw_loop()
     glfwSetInputMode(window, GLFW_STICKY_KEYS, GL_TRUE);
     glfwSetInputMode(window, GLFW_STICKY_MOUSE_BUTTONS, 1);
 
-    do {
+    // Check if the ESC key was pressed or the window was closed
+
+    while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
+	   glfwWindowShouldClose(window) == 0) {
+	glfwPollEvents();
 	// Clear the screen. It's not mentioned before Tutorial 02,
 	// but it can cause flickering, so it's there nonetheless.
 	glClear(GL_COLOR_BUFFER_BIT);
@@ -230,9 +234,5 @@ void glfw_loop()
 
 	// Swap buffers
 	glfwSwapBuffers(window);
-	glfwPollEvents();
-    }				       // Check if the ESC key was pressed or the
-    // window was closed
-    while (glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS &&
-	   glfwWindowShouldClose(window) == 0);
+    }
 }

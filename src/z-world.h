@@ -1,8 +1,8 @@
 #ifndef Z_WORLD_H_INCLUDED
 #define Z_WORLD_H_INCLUDED
 
-#include "z-models.h"
-#include "z-materials.h"
+struct model_st;
+struct material_st;
 
 struct object_st {
     int id;
@@ -16,22 +16,21 @@ struct object_st {
 	GLfloat normalmat[4][4];
     } modelblk;
 
-    GLint modelblk_offset;
-    GLint modelblk_size;
+    int modelblk_offset;
+    int modelblk_size;
 
-    GLfloat translate[3];
-    GLfloat scale[3];
-    GLfloat rotate_axis[3];
-    GLfloat rotate_angle;
+    float translate[3];
+    float scale[3];
+    float rotate_axis[3];
+    float rotate_angle;
 
 };
 
-extern void world_init(GLfloat, GLfloat, GLfloat);
+extern void world_init(float, float, float);
 
-extern void obj_abs_translate(struct object_st *, GLfloat, GLfloat, GLfloat);
-extern void obj_abs_scale(struct object_st *, GLfloat, GLfloat, GLfloat);
-extern void obj_abs_rotate(struct object_st *, GLfloat, GLfloat, GLfloat,
-			   GLfloat);
+extern void obj_abs_translate(struct object_st *, float, float, float);
+extern void obj_abs_scale(struct object_st *, float, float, float);
+extern void obj_abs_rotate(struct object_st *, float, float, float, float);
 extern void obj_set_material(struct object_st *, int);
 
 extern void obj_set_modelblk_offset(struct object_st *, int);

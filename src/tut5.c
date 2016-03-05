@@ -8,7 +8,7 @@
 #include "z-png.h"
 #include "z-models.h"
 #include "z-materials.h"
-#include "z-eye.h"
+#include "z-camera.h"
 #include "z-world.h"
 #include "z-maths.h"
 #include "z-light.h"
@@ -255,8 +255,8 @@ void setuniforms_sceneblk(void)
     // Camera specific
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_scene);
 
-    eye_compute_view_mat4(sc);
-    eye_compute_proj_mat4(sc);
+    cam_compute_view_mat4(sc);
+    cam_compute_proj_mat4(sc);
 
     sceneblk_sz = sizeof(sc->sceneblk);
     GLint realblk_sz = sceneblk_sz;
@@ -619,8 +619,8 @@ void main_init(void)
     mdl_init();
     mtrl_init();
 
-    sc = eye_create_scene();
-    eye_init(sc);
+    sc = cam_create_scene();
+    cam_init(sc);
 
     lights = light_create_light();
     light_init(lights);
