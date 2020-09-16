@@ -6,7 +6,11 @@ $ chmod 777 autogen.sh
 $ ./autogen.sh
 $ ./configure
 $ make
+$ cd src
 ```
+
+These tutorials are for the batch 2015-2017 of RKMVERI, OpenGL course. Please read [LICENSE](LICENSE) for more details.
+
 
 #### tutorial 0
 
