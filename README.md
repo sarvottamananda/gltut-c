@@ -1,4 +1,15 @@
+<p align="center">
+    <img src="img/autoworld_logo.png" width="480"\>
+</p>
+
+***
+
 # Autoworld
+
+These tutorials are for the batch 2015-2017 of RKMVERI, OpenGL course written in C. Please read [LICENSE](LICENSE) for more details.
+
+
+## Installation
 
 ```
 $ apt-get install libtool
@@ -9,14 +20,15 @@ $ make
 $ cd src
 ```
 
-These tutorials are for the batch 2015-2017 of RKMVERI, OpenGL course. Please read [LICENSE](LICENSE) for more details.
 
+## Examples
 
 #### tutorial 0
 
 ```
 $ ./tut0
 ```
+
 ![tutorial 0](img/tut0.png)
 
 
@@ -26,12 +38,14 @@ $ ./tut0
 ```
 $ ./tut1
 ```
+
 ![tutorial 1](img/tut1.png)
 
 
 #### tutorial 2
 
 ```
+
 $ ./tut2
 ```
 ![tutorial 2](img/tut2.png)
@@ -54,3 +68,4 @@ $ ./tut4
 
 ***
 
+## Contri
