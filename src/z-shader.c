@@ -66,8 +66,9 @@ GLuint opengl_createshader(GLenum type, const char *shaderfile)
 
     GLchar *shaderbuf = readfile(shaderfile);
 
-    // The shader source code itself is loaded to the shader object using glShaderSource.
-    // The shader is then compiled using the glCompileShader function.
+    // The shader source code itself is loaded to the shader object using
+    // glShaderSource.  The shader is then compiled using the glCompileShader
+    // function.
 
     // Load the shader source
     glShaderSource(shader, 1, (const GLchar const **)&shaderbuf, NULL);
@@ -126,17 +127,20 @@ GLuint opengl_createprogram(GLuint * shaders, GLuint * shader_list)
 	glAttachShader(progid, shaders[shader_list[i]]);
     }
 
-    // Once the shaders have been attached, the next step the sample application does is to
-    // set the location for the vertex shader attribute vPosition:
+    // Once the shaders have been attached, the next step the sample
+    // application does is to set the location for the vertex shader attribute
+    // vPosition:
 
     // Bind variables to specific locations
-//      for(int i = 0; names[i]!=NULL; i++)
-//         glBindAttribLocation(progid, locs[i], names[i]);
+    // for(int i = 0; names[i]!=NULL; i++)
+    // glBindAttribLocation(progid, locs[i], names[i]);
 
-    // In Chapter 6, “Vertex Attributes, Vertex Arrays, and Buffer Objects,” we go
-    // into more detail on binding attributes. For now, note that the call to glBindAttribLocation binds the v
-    // Position attribute declared in the vertex shader to location 0.
-    // Later, when we specify the vertex data, this location is used to specify the position.
+    // In Chapter 6, “Vertex Attributes, Vertex Arrays, and Buffer
+    // Objects,” we go into more detail on binding attributes. For now, note
+    // that the call to glBindAttribLocation binds the vPosition attribute
+    // declared in the vertex shader to location 0.
+    // Later, when we specify the vertex data, this location is used to
+    // specify the position.
 
     // Finally, we are ready to link the program and check for errors:
 

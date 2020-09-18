@@ -5,20 +5,20 @@
 #include <math.h>
 
 #include "z-world.h"
-#include "z-mat.h"
+#include "z-maths.h"
 #include "z-list.h"
 #include "z-main.h"
 #include "z-models.h"
 #include "z-materials.h"
 #include "z-pvm.h"
 
-static GLfloat world_min_x = -1024.0f;
-static GLfloat world_min_y = -1024.0f;
-static GLfloat world_min_z = -1024.0f;
+static float world_min_x = -1024.0f;
+static float world_min_y = -1024.0f;
+static float world_min_z = -1024.0f;
 
-static GLfloat world_max_x = 1024.0f;
-static GLfloat world_max_y = 1024.0f;
-static GLfloat world_max_z = 1024.0f;
+static float world_max_x = 1024.0f;
+static float world_max_y = 1024.0f;
+static float world_max_z = 1024.0f;
 
 static int id = 0;
 
@@ -50,9 +50,9 @@ struct object_st *obj_create_object(char *name,
 	exit(EXIT_FAILURE);
     }
 
-    zero_vec3(tmp->translate);
-    unit_vec3(tmp->scale);
-    zero_vec3(tmp->rotate_axis);
+    vec3_zero(tmp->translate);
+    vec3_set_1f(tmp->scale, 1.0);
+    vec3_zero(tmp->rotate_axis);
     tmp->rotate_angle = 0.0f;
 
     tmp->id = id++;
@@ -68,7 +68,7 @@ void destroy_object(struct object_st *obj)
     free(obj);
 }
 
-void world_init(GLfloat maxx, GLfloat maxy, GLfloat maxz)
+void world_init(float maxx, float maxy, float maxz)
 {
     world_min_x = -maxx;
     world_min_y = -maxy;
@@ -85,22 +85,21 @@ void world_init(GLfloat maxx, GLfloat maxy, GLfloat maxz)
 
 }
 
-void obj_abs_translate(struct object_st *obj, GLfloat x, GLfloat y, GLfloat z)
+void obj_abs_translate(struct object_st *obj, float x, float y, float z)
 {
     obj->translate[0] = x;
     obj->translate[1] = y;
     obj->translate[2] = z;
 }
 
-void obj_abs_scale(struct object_st *obj, GLfloat x, GLfloat y, GLfloat z)
+void obj_abs_scale(struct object_st *obj, float x, float y, float z)
 {
     obj->scale[0] = x;
     obj->scale[1] = y;
     obj->scale[2] = z;
 }
 
-void obj_abs_rotate(struct object_st *obj, GLfloat x, GLfloat y, GLfloat z,
-		    GLfloat a)
+void obj_abs_rotate(struct object_st *obj, float x, float y, float z, float a)
 {
     obj->rotate_axis[0] = x;
     obj->rotate_axis[1] = y;
@@ -110,7 +109,7 @@ void obj_abs_rotate(struct object_st *obj, GLfloat x, GLfloat y, GLfloat z,
 
 void obj_set_material(struct object_st *obj, int mat)
 {
-    obj->material = mtr_get_std_material(mat);
+    obj->material = mtrl_get_std_material(mat);
 }
 
 void obj_set_modelblk_offset(struct object_st *obj, int offset)
@@ -123,17 +122,23 @@ void obj_set_modelblk_size(struct object_st *obj, int sz)
     obj->modelblk_size = sz;
 }
 
-void calculate_model_mat4(struct object_st *obj)
+void obj_compute_model_mat4(struct object_st *obj)
 {
-    pvm_calculate_model_mat4(obj->translate,
-			     obj->scale,
-			     obj->rotate_axis, obj->rotate_angle,
-			     obj->modelblk.modelmat);
+    pvm_compute_model_mat4(obj->modelblk.modelmat,
+			   obj->translate,
+			   obj->scale, obj->rotate_axis, obj->rotate_angle);
 }
 
-void calculate_normal_mat4(struct object_st *obj)
+void obj_compute_normal_mat4(struct object_st *obj)
 {
 
-    inverse_mat4(obj->modelblk.modelmat, obj->modelblk.normalmat);
-    transpose_mat4(obj->modelblk.normalmat, obj->modelblk.normalmat);
+    mat4_inverse(obj->modelblk.normalmat, obj->modelblk.modelmat);
+    mat4_transpose(obj->modelblk.normalmat, obj->modelblk.normalmat);
+}
+
+void obj_print(struct object_st *obj)
+{
+    printf("Object:%s [%d]\n", obj->name, obj->id);
+    printf("\tModel: %s [%d]\n", obj->model->name, obj->model->id);
+    printf("\tMaterial: %s [%d]\n", obj->material->name, obj->material->id);
 }
