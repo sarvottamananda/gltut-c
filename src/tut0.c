@@ -52,7 +52,7 @@ void glfw_stuff(void)
 
     glfwWindowHint(GLFW_DEPTH_BITS, 32);
 
-    window = glfwCreateWindow(800, 600, "Tutorial 0", NULL, NULL);
+    window = glfwCreateWindow(640, 480, "Tutorial 0", NULL, NULL);
 
     if (window == NULL) {
 	fprintf(stderr, "Failed to open GLFW window.\n");
