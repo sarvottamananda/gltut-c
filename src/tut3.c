@@ -4,7 +4,7 @@
 
 #include "z-main.h"
 #include "z-shader.h"
-#include "z-mat.h"
+#include "z-maths.h"
 #include "z-pvm.h"
 #include "z-png.h"
 
@@ -20,7 +20,7 @@ static GLuint vao[2] = { 0, 0 };
 
 int verticeCount = 36;
 
-GLfloat vertices[] = {
+float vertices[] = {
     0.0f, 0.0f, 1.0f, 1.0f,
     1.0f, 0.0f, 1.0f, 1.0f,
     0.0f, 1.0f, 1.0f, 1.0f,
@@ -70,7 +70,7 @@ GLfloat vertices[] = {
     0.0f, 1.0f, 1.0f, 1.0f,
 };
 
-GLfloat normals[] = {
+float normals[] = {
     0.0f, 0.0f, 1.0f,
     0.0f, 0.0f, 1.0f,
     0.0f, 0.0f, 1.0f,
@@ -120,7 +120,7 @@ GLfloat normals[] = {
     -1.0f, 0.0f, 0.0f,
 };
 
-GLfloat texcoords[] = {
+float texcoords[] = {
     0.0f, 0.0f,
     1.0f, 0.0f,
     0.0f, 1.0f,
@@ -188,7 +188,7 @@ void setvaos(void)
 {
     GLuint vbo = 0;
 
-    //vposition_loc = 0;
+    // vposition_loc = 0;
     position_loc = glGetAttribLocation(progid, "position");
     texcoord_loc = glGetAttribLocation(progid, "texcoord");
     normal_loc = glGetAttribLocation(progid, "normal");
@@ -232,18 +232,18 @@ void setvaos(void)
     glBindVertexArray(0);
 }
 
-GLfloat model_mat4[4][4];
-GLfloat view_mat4[4][4];
-GLfloat proj_mat4[4][4];
+float model_mat4[4][4];
+float view_mat4[4][4];
+float proj_mat4[4][4];
 
-GLfloat color_vec[4];
-GLfloat ambient_vec[4];
-GLfloat diffuse_vec[4];
-GLfloat specular_vec[4];
-GLfloat shininess_float = 0.0f;
+float color_vec[4];
+float ambient_vec[4];
+float diffuse_vec[4];
+float specular_vec[4];
+float shininess_float = 0.0f;
 
-GLfloat light_color_vec[4] = { 1.0f, 1.0f, 1.0f };
-GLfloat light_pos_vec[4] = { 0.0f, 2.0f, 0.0f };
+float light_color_vec[4] = { 1.0f, 1.0f, 1.0f };
+float light_pos_vec[4] = { 0.0f, 2.0f, 0.0f };
 
 GLuint ubo_model = 0;
 GLuint ubo_scene = 0;
@@ -262,15 +262,13 @@ void setuniforms(void)
     ubo_light = ubo[3];
 
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_model);
-    glBufferData(GL_UNIFORM_BUFFER, sizeof(model_mat4), NULL,
-		 GL_DYNAMIC_DRAW);
+    glBufferData(GL_UNIFORM_BUFFER, sizeof(model_mat4), NULL, GL_DYNAMIC_DRAW);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(model_mat4), model_mat4);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
 
     glBindBuffer(GL_UNIFORM_BUFFER, ubo_scene);
     glBufferData(GL_UNIFORM_BUFFER,
-		 sizeof(view_mat4) + sizeof(proj_mat4), NULL,
-		 GL_DYNAMIC_DRAW);
+		 sizeof(view_mat4) + sizeof(proj_mat4), NULL, GL_DYNAMIC_DRAW);
     glBufferSubData(GL_UNIFORM_BUFFER, 0, sizeof(view_mat4), view_mat4);
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(view_mat4),
 		    sizeof(proj_mat4), proj_mat4);
@@ -288,8 +286,7 @@ void setuniforms(void)
     off += sizeof(ambient_vec);
     glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(diffuse_vec), diffuse_vec);
     off += sizeof(diffuse_vec);
-    glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(specular_vec),
-		    specular_vec);
+    glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(specular_vec), specular_vec);
     off += sizeof(specular_vec);
     glBufferSubData(GL_UNIFORM_BUFFER, off, sizeof(shininess_float),
 		    &shininess_float);
@@ -299,8 +296,7 @@ void setuniforms(void)
     glBufferData(GL_UNIFORM_BUFFER,
 		 sizeof(light_pos_vec) + sizeof(light_color_vec),
 		 NULL, GL_DYNAMIC_DRAW);
-    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(light_pos_vec), 0,
-		    light_pos_vec);
+    glBufferSubData(GL_UNIFORM_BUFFER, sizeof(light_pos_vec), 0, light_pos_vec);
     glBufferSubData(GL_UNIFORM_BUFFER, sizeof(light_color_vec),
 		    sizeof(light_pos_vec), light_color_vec);
     glBindBuffer(GL_UNIFORM_BUFFER, 0);
@@ -353,7 +349,8 @@ void settextures(void)
     glTexStorage2D(GL_TEXTURE_2D, num_mipmaps, GL_RGBA8, width, height);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGRA,
 		    GL_UNSIGNED_BYTE, gpixels);
-    glGenerateMipmap(GL_TEXTURE_2D);	//Generate num_mipmaps number of mipmaps here.
+    // Generate num_mipmaps number of mipmaps here.
+    glGenerateMipmap(GL_TEXTURE_2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
@@ -370,18 +367,19 @@ void settextures(void)
     glTexStorage2D(GL_TEXTURE_2D, num_mipmaps, GL_RGBA8, width, height);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, width, height, GL_BGRA,
 		    GL_UNSIGNED_BYTE, tpixels);
-    glGenerateMipmap(GL_TEXTURE_2D);	//Generate num_mipmaps number of mipmaps here.
+    // Generate num_mipmaps number of mipmaps here.
+    glGenerateMipmap(GL_TEXTURE_2D);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
 		    GL_LINEAR_MIPMAP_LINEAR);
 
-    //glActiveTexture(GL_TEXTURE0);
-    //glBindTexture(GL_TEXTURE_2D, tid_base);
+    // glActiveTexture(GL_TEXTURE0);
+    // glBindTexture(GL_TEXTURE_2D, tid_base);
 
-    //glActiveTexture(GL_TEXTURE1);
-    //glBindTexture(GL_TEXTURE_2D, tid_text);
+    // glActiveTexture(GL_TEXTURE1);
+    // glBindTexture(GL_TEXTURE_2D, tid_text);
 
     glActiveTexture(GL_TEXTURE0);
 
@@ -399,20 +397,20 @@ void settextures(void)
     png_free_image(&image_txt);
 }
 
-static GLfloat model_translate[3] = { 0.0f, 0.0f, 0.0f };
-static GLfloat model_scale[3] = { 0.66f, 0.66f, 0.66f };
-static GLfloat model_rotate_axis[3] = { 0.0f, 0.0f, 0.0f };
+static float model_translate[3] = { 0.0f, 0.0f, 0.0f };
+static float model_scale[3] = { 0.66f, 0.66f, 0.66f };
+static float model_rotate_axis[3] = { 0.0f, 0.0f, 0.0f };
 
-static GLfloat model_rotate_angle = 0.0f * M_PI / 180.0f;
+static float model_rotate_angle = 0.0f * M_PI / 180.0f;
 
-static GLfloat camera_position[3] = { 1.0f, 1.0f, 1.0f };
-static GLfloat camera_target[3] = { 0.0f, 0.0f, 0.0f };
-static GLfloat camera_up[3] = { 0.0f, 1.0f, 0.0f };
+static float camera_position[3] = { 1.0f, 1.0f, 1.0f };
+static float camera_target[3] = { 0.0f, 0.0f, 0.0f };
+static float camera_up[3] = { 0.0f, 1.0f, 0.0f };
 
-static GLfloat fovy = 90.0f * M_PI / 180.0f;
-static GLfloat aspect = 4.0f / 3.0f;
-static GLfloat znear = 0.1;
-static GLfloat zfar = 100.0;
+static float fovy = 90.0f * M_PI / 180.0f;
+static float aspect = 4.0f / 3.0f;
+static float znear = 0.1;
+static float zfar = 100.0;
 
 void main_init(void)
 {
@@ -420,17 +418,15 @@ void main_init(void)
 
     setvaos();
 
-    pvm_calculate_model_mat4(model_translate, model_scale,
-			     model_rotate_axis, model_rotate_angle,
-			     model_mat4);
-    print_mat4("Model", model_mat4);
+    pvm_compute_model_mat4(model_mat4, model_translate, model_scale,
+			   model_rotate_axis, model_rotate_angle);
+    mat4_print("Model", model_mat4);
 
-    pvm_calculate_view_mat4(camera_position, camera_target, camera_up,
-			    view_mat4);
-    print_mat4("View", view_mat4);
+    pvm_compute_view_mat4(view_mat4, camera_position, camera_target, camera_up);
+    mat4_print("View", view_mat4);
 
-    pvm_calculate_proj_mat4(fovy, aspect, znear, zfar, proj_mat4);
-    print_mat4("Proj", proj_mat4);
+    pvm_compute_proj_mat4(proj_mat4, fovy, aspect, znear, zfar);
+    mat4_print("Proj", proj_mat4);
 
     setuniforms();
 
@@ -446,9 +442,9 @@ void main_draw(void)
     // Draw the triangle 1 !
     glBindVertexArray(vao[0]);
 
-    //glDrawArrays(GL_TRIANGLES, 0, 6);
-    //glDrawArrays(GL_TRIANGLES, 12, 6);
-    //glDrawArrays(GL_TRIANGLES, 24, 6);
+    // glDrawArrays(GL_TRIANGLES, 0, 6);
+    // glDrawArrays(GL_TRIANGLES, 12, 6);
+    // glDrawArrays(GL_TRIANGLES, 24, 6);
     glDrawArrays(GL_TRIANGLES, 0, 36);
 
     glBindVertexArray(0);

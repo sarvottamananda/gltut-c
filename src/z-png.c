@@ -55,8 +55,7 @@ void png_read_file(char *filename, struct image_st *img)
 
     // These colortype don't have an alpha channel then fill it with 0xff.
     if (colortype == PNG_COLOR_TYPE_RGB ||
-	colortype == PNG_COLOR_TYPE_GRAY
-	|| colortype == PNG_COLOR_TYPE_PALETTE)
+	colortype == PNG_COLOR_TYPE_GRAY || colortype == PNG_COLOR_TYPE_PALETTE)
 	png_set_filler(png, 0xFF, PNG_FILLER_AFTER);
 
     if (colortype == PNG_COLOR_TYPE_GRAY ||
@@ -137,9 +136,9 @@ void png_write_file(char *filename, struct image_st *img)
 
     // To remove the alpha channel for PNG_COLOR_TYPE_RGB format,
     // Use png_set_filler().
-    //png_set_filler(png, 0, PNG_FILLER_AFTER);
+    // png_set_filler(png, 0, PNG_FILLER_AFTER);
 
-    //png_write_image(png, row_pointers);
+    // png_write_image(png, row_pointers);
 
     row = (png_byte *) malloc(png_get_rowbytes(png, info));
 
@@ -172,19 +171,23 @@ void process_png_file(struct image_st *img)
 	for (int x = 0; x < width; x++) {
 	    png_bytep px = &(row[x * 4]);
 	    // Do something awesome for each pixel here...
-	    //printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", x, y, px[0], px[1], px[2], px[3]);
+	    /*
+	       printf("%4d, %4d = RGBA(%3d, %3d, %3d, %3d)\n", 
+	       x, y, px[0], px[1], px[2], px[3]);
+	     */
 	}
     }
 }
 
 /*
-int main(int argc, char *argv[]) {
-  if(argc != 3) abort();
+int main(int argc, char *argv[]) 
+{
+   if(argc != 3) abort();
 
-  read_png_file(argv[1]);
-  process_png_file();
-  write_png_file(argv[2]);
+   read_png_file(argv[1]);
+   process_png_file();
+   write_png_file(argv[2]);
 
-  return 0;
+   return 0;
 }
 */

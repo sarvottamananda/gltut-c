@@ -1,8 +1,9 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <GL/glew.h>
 
 #include "z-light.h"
-#include "z-mat.h"
+#include "z-maths.h"
 
 struct light_st *light_create_light(void)
 {
@@ -21,30 +22,30 @@ void light_destroy_light(struct light_st *lt)
     free(lt);
 }
 
-void light_set_ambience(struct light_st *lt, GLfloat a[3])
+void light_set_ambience(struct light_st *lt, float a[3])
 {
-    copy_vec3(a, lt->lightblk.ambience);
+    vec3_copy(lt->lightblk.ambience, a);
 }
 
-void light_set_light(struct light_st *lt, int n, GLfloat lp[3], GLfloat e[3])
+void light_set_light(struct light_st *lt, int n, float lp[3], float e[3])
 {
     if (lt->lightblk.num < n + 1)
 	lt->lightblk.num = n + 1;
-    copy_vec3(lp, lt->lightblk.pos[n]);
-    copy_vec3(e, lt->lightblk.emission[n]);
+    vec3_copy(lt->lightblk.pos[n].xyz, lp);
+    vec3_copy(lt->lightblk.emission[n].rgb, e);
 }
 
 void light_init(struct light_st *lt)
 {
-    set_vec3(0.1f, 0.1f, 0.1f, lt->lightblk.ambience);
-    set_vec3(0.5f, 0.5f, 0.5f, lt->lightblk.emission[0]);
-    set_vec3(0.6f, 0.6f, 0.6f, lt->lightblk.emission[1]);
-    set_vec3(0.7f, 0.7f, 0.7f, lt->lightblk.emission[2]);
-    set_vec3(0.8f, 0.8f, 0.8f, lt->lightblk.emission[3]);
-    set_vec3(-1.0f, -1.5f, 1.0f, lt->lightblk.pos[0]);
-    set_vec3(0.0f, 0.0f, 2.0f, lt->lightblk.pos[1]);
-    set_vec3(2.0f, 0.0f, 2.0f, lt->lightblk.pos[2]);
-    set_vec3(2.0f, 2.0f, 2.0f, lt->lightblk.pos[3]);
+    vec3_set(lt->lightblk.ambience, 0.3f, 0.3f, 0.3f);
+    vec3_set(lt->lightblk.emission[0].rgb, 0.5f, 0.5f, 0.5f);
+    vec3_set(lt->lightblk.emission[1].rgb, 0.6f, 0.6f, 0.6f);
+    vec3_set(lt->lightblk.emission[2].rgb, 0.7f, 0.7f, 0.7f);
+    vec3_set(lt->lightblk.emission[3].rgb, 0.8f, 0.8f, 0.8f);
+    vec3_set(lt->lightblk.pos[0].xyz, 0.0f, 0.0f, 2.5f);
+    vec3_set(lt->lightblk.pos[1].xyz, 0.0f, 0.0f, 2.0f);
+    vec3_set(lt->lightblk.pos[2].xyz, 2.0f, 0.0f, 2.0f);
+    vec3_set(lt->lightblk.pos[3].xyz, 2.0f, 2.0f, 2.0f);
     lt->lightblk.num = 1;
 }
 

@@ -5,7 +5,6 @@ enum material_enum {
     MATERIAL_NONE, MATERIAL_WHITE, MATERIAL_BLACK,
     MATERIAL_RED, MATERIAL_GREEN, MATERIAL_BLUE,
     MATERIAL_YELLOW, MATERIAL_MAGENTA, MATERIAL_CYAN,
-    MATERIAL_1000, MATERIAL_0100, MATERIAL_0010, MATERIAL_0001,
     MATERIAL_MAX
 };
 
@@ -39,17 +38,22 @@ enum color_type_en {
     COLOR_TYPE_MAX
 };
 
+struct texture_st;
+
 struct material_st {
     int id;
     char *name;
     struct matblk_st {
-	GLfloat ambient[4];
-	GLfloat diffuse[4];
-	GLfloat specular[4];
-	GLfloat shininess;
+	GLfloat ambient[3];
 	GLfloat _pad1;
+	GLfloat diffuse[3];
+	GLfloat _pad2;
+	GLfloat specular[3];
+	GLfloat _pad3;
 	GLfloat texorigin[2];
 	GLfloat texsize[2];
+	GLfloat shininess;
+	GLfloat opacity;
     } matblk;
 
     struct texture_st *tex;
@@ -58,16 +62,28 @@ struct material_st {
     int matblk_size;
 };
 
-extern struct material_st *mtr_get_std_material(int);
-extern void mtr_set_matblk_offset(struct material_st *, int);
-extern void mtr_set_matblk_size(struct material_st *, int);
-extern void mtr_get_std_color(int, GLfloat[]);
+extern struct material_st *mtrl_get_std_material(int);
+extern void mtrl_set_matblk_offset(struct material_st *, int);
+extern void mtrl_set_matblk_size(struct material_st *, int);
+extern void mtrl_get_std_color(float[], int);
 
-extern struct material_st *mtr_new_material(int);
-extern void mtr_delete_material(struct material_st *);
-extern void mtr_set_texcoords(struct material_st *, GLfloat, GLfloat, GLfloat,
-			      GLfloat);
+extern struct material_st *mtrl_new_material(int);
+extern void mtrl_delete_material(struct material_st *);
+extern void mtrl_set_texcoords(struct material_st *, float, float,
+			       float, float);
+extern void mtrl_set_name(struct material_st *m, char *name);
 
-void mtr_init(void);
+extern void mtrl_copy(struct material_st *dst, struct material_st *src);
+extern void mtrl_set_ambient(struct material_st *m, float r, float g,
+			     float b, float a);
+extern void mtrl_set_diffuse(struct material_st *m, float r, float g,
+			     float b, float a);
+extern void mtrl_set_specular(struct material_st *m, float r, float g,
+			      float b, float a);
+extern void mtrl_set_shininess(struct material_st *m, float s);
+
+extern void mtrl_init(void);
+
+extern void mtrl_print(struct material_st *mat);
 
 #endif

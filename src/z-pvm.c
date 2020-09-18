@@ -1,44 +1,33 @@
 #include <stdio.h>
 #include <math.h>
-#include <GL/glew.h>
 
 #include "z-pvm.h"
-#include "z-mat.h"
+#include "z-maths.h"
 
-GLfloat degtorad(GLfloat deg)
+void pvm_compute_scale_mat4(float mat[][4], float v[3])
 {
-    return deg * M_PI / 180.0f;
-}
-
-GLfloat radtodeg(GLfloat rad)
-{
-    return rad * 180.0f / M_PI;
-}
-
-void set_scale_mat4(GLfloat mat[][4], GLfloat v[3])
-{
-    set_identity_mat4(mat);
+    mat4_identity(mat);
     for (int i = 0; i < 3; i++)
 	mat[i][i] = v[i];
 }
 
-void set_translate_mat4(GLfloat mat[][4], GLfloat v[3])
+void pvm_compute_translate_mat4(float mat[][4], float v[3])
 {
-    set_identity_mat4(mat);
+    mat4_identity(mat);
     for (int i = 0; i < 3; i++)
 	mat[3][i] = v[i];
 }
 
-void set_rotate_mat4(GLfloat mat[][4], GLfloat v[3], GLfloat alpha)
+void pvm_compute_rotate_mat4(float mat[][4], float v[3], float alpha)
 {
-    GLfloat c = cosf(alpha);
-    GLfloat s = sinf(alpha);
-    GLfloat t = 1 - c;
+    float c = cosf(alpha);
+    float s = sinf(alpha);
+    float t = 1 - c;
 
-    normalize_vec3(v);
-    GLfloat x = v[0];
-    GLfloat y = v[1];
-    GLfloat z = v[2];
+    vec3_normalize(v);
+    float x = v[0];
+    float y = v[1];
+    float z = v[2];
 
     /*
      *     | (tx² + c)  (txy - sz) (txz + sy) |
@@ -64,45 +53,39 @@ void set_rotate_mat4(GLfloat mat[][4], GLfloat v[3], GLfloat alpha)
 
 }
 
-void pvm_calculate_model_mat4(GLfloat tr[3],
-			      GLfloat sc[3],
-			      GLfloat rot[3], GLfloat rot_ang,
-			      GLfloat res[][4])
+void pvm_compute_model_mat4(float res[][4], float tr[3],
+			    float sc[3], float rot[3], float rot_ang)
 {
-    GLfloat scale[4][4];
-    GLfloat translate[4][4];
-    GLfloat rotate[4][4];
+    float scale[4][4];
+    float translate[4][4];
+    float rotate[4][4];
 
-    set_scale_mat4(scale, sc);
-    set_translate_mat4(translate, tr);
-    set_rotate_mat4(rotate, rot, rot_ang);
+    pvm_compute_scale_mat4(scale, sc);
+    pvm_compute_translate_mat4(translate, tr);
+    pvm_compute_rotate_mat4(rotate, rot, rot_ang);
 
-    GLfloat tmp[4][4];
+    float tmp[4][4];
 
-    mult_mat4(rotate, scale, tmp);
-    mult_mat4(translate, tmp, res);
+    mat4_mult(tmp, rotate, scale);
+    mat4_mult(res, translate, tmp);
 }
 
-void pvm_calculate_view_mat4(GLfloat cpos[3],
-			     GLfloat ctgt[3], GLfloat up[3], GLfloat res[][4])
+void pvm_compute_view_mat4(float res[][4],
+			   float cpos[3], float ctgt[3], float up[3])
 {
-    GLfloat zaxis[3];
-    GLfloat yaxis[3];
-    GLfloat xaxis[3];
+    float zaxis[3];
+    float yaxis[3];
+    float xaxis[3];
 
-    sub_vec3(cpos, ctgt, zaxis);
-    normalize_vec3(zaxis);
+    vec3_sub(zaxis, cpos, ctgt);
+    vec3_normalize(zaxis);
 
-    cross_vec3(up, zaxis, xaxis);
-    normalize_vec3(xaxis);
+    vec3_cross(xaxis, up, zaxis);
+    vec3_normalize(xaxis);
 
-    cross_vec3(zaxis, xaxis, yaxis);
+    vec3_cross(yaxis, zaxis, xaxis);
     // Not needed
-    // normalize_vec3(yaxis);
-
-    //print_vec3("zaxis",zaxis);
-    //print_vec3("xaxis",xaxis);
-    //print_vec3("yaxis",yaxis);
+    // normalize(yaxis);
 
     res[0][0] = xaxis[0];
     res[1][0] = xaxis[1];
@@ -116,9 +99,9 @@ void pvm_calculate_view_mat4(GLfloat cpos[3],
     res[1][2] = zaxis[1];
     res[2][2] = zaxis[2];
 
-    res[3][0] = -dot_vec3(xaxis, cpos);
-    res[3][1] = -dot_vec3(yaxis, cpos);
-    res[3][2] = -dot_vec3(zaxis, cpos);
+    res[3][0] = -vec3_dot(xaxis, cpos);
+    res[3][1] = -vec3_dot(yaxis, cpos);
+    res[3][2] = -vec3_dot(zaxis, cpos);
 
     res[0][3] = 0;
     res[1][3] = 0;
@@ -128,13 +111,12 @@ void pvm_calculate_view_mat4(GLfloat cpos[3],
 
 }
 
-void pvm_calculate_proj_mat4(GLfloat fovy,
-			     GLfloat a, GLfloat n, GLfloat f,
-			     GLfloat res[][4])
+void pvm_compute_proj_mat4(float res[][4], float fovy,
+			   float a, float n, float f)
 {
-    set_identity_mat4(res);
+    mat4_identity(res);
 
-    GLfloat e = 1 / tanf(fovy / 2.0f);
+    float e = 1 / tanf(fovy / 2.0f);
 
     res[0][0] = e / a;
     res[1][1] = e;

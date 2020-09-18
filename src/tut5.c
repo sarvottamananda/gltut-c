@@ -12,6 +12,7 @@
 #include "z-world.h"
 #include "z-maths.h"
 #include "z-light.h"
+#include "z-geom.h"
 #include "z-list.h"
 
 #include "debug.h"
@@ -31,10 +32,12 @@ static struct dlist_hdr *list_objects = NULL;
 static struct dlist_hdr *list_models = NULL;
 static struct dlist_hdr *list_materials = NULL;
 
-static struct object_st *cube1 = NULL;
-static struct object_st *cube2 = NULL;
-static struct object_st *cube3 = NULL;
-static struct object_st *cube4 = NULL;
+static struct object_st *cube = NULL;
+static struct object_st *sphere1 = NULL;
+static struct object_st *sphere2 = NULL;
+static struct object_st *sphere3 = NULL;
+static struct object_st *sphere4 = NULL;
+static struct object_st *sphere5 = NULL;
 static struct object_st *checker = NULL;
 static struct object_st *light_obj[MAXLIGHTS];
 
@@ -63,11 +66,11 @@ void setshaders(void)
     GLuint shader[3];
 
     shader[0] =
-	opengl_createshader(GL_VERTEX_SHADER, "shaders/tut4-plain.vert");
+	opengl_createshader(GL_VERTEX_SHADER, "shaders/tut5-plain.vert");
     shader[1] =
-	opengl_createshader(GL_FRAGMENT_SHADER, "shaders/tut4-plain.frag");
+	opengl_createshader(GL_FRAGMENT_SHADER, "shaders/tut5-plain.frag");
     shader[2] =
-	opengl_createshader(GL_FRAGMENT_SHADER, "shaders/tut4-texture.frag");
+	opengl_createshader(GL_FRAGMENT_SHADER, "shaders/tut5-texture.frag");
     shader[3] = 0;
 
     GLuint plain_shlist[] = { 0, 1, -1 };
@@ -154,6 +157,7 @@ void setvaos(void)
 	data = ((struct model_st *)mdl->data)->vbuf;
 
 	mdl_set_vbo_offset(mdl->data, num);
+	mdl_set_vbo_start(mdl->data, num);
 	DBG_TRACE(0, "Vcount: %d", cnt);
 	DBG_TRACE(0, "Voffset: %d", offset);
 
@@ -506,85 +510,86 @@ void settextures(void)
 
 void objects_init(void)
 {
-    dl_search_and_insert(list_models, mdl_get_std_model(MODEL_CUBE));
-
-    dl_search_and_insert(list_materials, mtrl_get_std_material(MATERIAL_RED));
-    dl_search_and_insert(list_materials,
-			 mtrl_get_std_material(MATERIAL_YELLOW));
-    dl_search_and_insert(list_materials, mtrl_get_std_material(MATERIAL_WHITE));
-    dl_search_and_insert(list_materials, mtrl_get_std_material(MATERIAL_CYAN));
-    dl_search_and_insert(list_materials, mtrl_get_std_material(MATERIAL_NONE));
-
-    cube1 = obj_create_object("red cube", mdl_get_std_model(MODEL_CUBE),
-			      mtrl_get_std_material(MATERIAL_RED)
+    cube = obj_create_object("red cube", mdl_get_std_model(MODEL_CUBE),
+			     mtrl_get_std_material(MATERIAL_RED)
 	);
 
-    dl_search_and_insert(list_objects, cube1);
+    obj_abs_translate(cube, 0.0f, 0.0f, 0.0f);
+    obj_abs_scale(cube, 0.5f, 0.5f, 0.5f);
+    obj_abs_rotate(cube, 1.0f, 1.0f, 1.0f, degtorad(0.0f));
 
-    cube2 = obj_create_object("yellow cube", mdl_get_std_model(MODEL_CUBE),
-			      mtrl_get_std_material(MATERIAL_YELLOW)
-	);
-    dl_search_and_insert(list_objects, cube2);
+    dl_search_and_insert(list_models, cube->model);
+    dl_search_and_insert(list_materials, cube->material);
+    dl_search_and_insert(list_objects, cube);
 
-    cube3 = obj_create_object("white cube", mdl_get_std_model(MODEL_CUBE),
-			      mtrl_get_std_material(MATERIAL_WHITE)
-	);
-    dl_search_and_insert(list_objects, cube3);
+    struct model_st *sp_model = mdl_create_sphere_stripped(40, 40, 0.0,
+							   4.0, 0.0, 4.0);
+    struct material_st *sp_material = mtrl_new_material(5);
+    struct material_st *cyan_material = mtrl_get_std_material(MATERIAL_GREEN);
 
-    struct material_st *bgrass = mtrl_new_material(1);
-    mtrl_set_texcoords(bgrass, 0.5, 0.0, 0.5, 1.0);
+    for (int i = 0; i < 5; i++) {
+	double a = 0.5;
+	double b = 0.1;
+	mtrl_copy(&sp_material[i], cyan_material);
+	mtrl_set_specular(&sp_material[i], a + i * b, a + i * b, a + i * b,
+			  a + i * b);
+	//mtrl_set_specular(&sp_material[i], 1.0, 1.0, 1.0, 1.0);
+	mtrl_set_shininess(&sp_material[i], i * 4.0);
+    }
 
-    dl_search_and_insert(list_materials, bgrass);
+    sphere1 = obj_create_object("sphere1", sp_model, &sp_material[0]);
+    obj_abs_scale(sphere1, 0.5f, 0.5f, 0.5f);
+    obj_abs_translate(sphere1, -3.0f, -1.0f, 1.0f);
 
-    cube4 =
-	obj_create_object("texture cube", mdl_get_std_model(MODEL_CUBE),
-			  bgrass);
-    dl_search_and_insert(list_objects, cube4);
+    sphere2 = obj_create_object("sphere2", sp_model, &sp_material[1]);
+    obj_abs_scale(sphere2, 0.5f, 0.5f, 0.5f);
+    obj_abs_translate(sphere2, -2.0f, 0.0f, 1.0f);
 
-    obj_abs_translate(cube1, 0.0f, 0.0f, 0.0f);
-    obj_abs_scale(cube1, 0.5f, 0.5f, 0.5f);
-    obj_abs_rotate(cube1, 1.0f, 1.0f, 1.0f, degtorad(0.0f));
+    sphere3 = obj_create_object("sphere3", sp_model, &sp_material[2]);
+    obj_abs_scale(sphere3, 0.5f, 0.5f, 0.5f);
+    obj_abs_translate(sphere3, -1.0f, 1.0f, 1.0f);
 
-    obj_abs_translate(cube2, -1.0f, 0.0f, 0.0f);
-    obj_abs_scale(cube2, 0.5f, 0.5f, 0.5f);
-    obj_abs_rotate(cube2, 1.0f, 1.0f, 1.0f, degtorad(0.0f));
+    sphere4 = obj_create_object("sphere4", sp_model, &sp_material[3]);
+    obj_abs_scale(sphere4, 0.5f, 0.5f, 0.5f);
+    obj_abs_translate(sphere4, 0.0f, 2.0f, 1.0f);
 
-    obj_abs_translate(cube3, 0.0f, -1.0f, 0.0f);
-    obj_abs_scale(cube3, 0.5f, 0.5f, 0.5f);
-    obj_abs_rotate(cube3, 1.0f, 1.0f, 1.0f, degtorad(0.0f));
+    sphere5 = obj_create_object("sphere5", sp_model, &sp_material[4]);
+    obj_abs_scale(sphere5, 0.5f, 0.5f, 0.5f);
+    obj_abs_translate(sphere5, 1.0f, 3.0f, 1.0f);
 
-    obj_abs_translate(cube4, -1.0f, -1.0f, 0.0f);
-    obj_abs_scale(cube4, 0.5f, 0.5f, 0.5f);
-    obj_abs_rotate(cube4, 1.0f, 1.0f, 1.0f, degtorad(0.0f));
+    dl_search_and_insert(list_models, sp_model);
+    for (int i = 0; i < 5; i++) {
+	dl_search_and_insert(list_materials, &sp_material[i]);
+    }
+    dl_search_and_insert(list_objects, sphere1);
+    dl_search_and_insert(list_objects, sphere2);
+    dl_search_and_insert(list_objects, sphere3);
+    dl_search_and_insert(list_objects, sphere4);
+    dl_search_and_insert(list_objects, sphere5);
 
     struct material_st *ggrass = mtrl_new_material(1);
+    mtrl_set_name(ggrass, "green grass");
     mtrl_set_texcoords(ggrass, 0.0, 0.0, 0.5, 1.0);
 
-    struct model_st *model =
-	mdl_create_checker_triangulated(16, 16, 0.0, 4.0, 0.0, 4.0);
+    mtrl_print(ggrass);
+
+    struct model_st *model = mdl_create_checker_stripped(16, 16, 0.0,
+							 4.0, 0.0, 4.0);
     checker = obj_create_object("checker", model, ggrass);
 
-    dl_search_and_insert(list_models, checker->model);
-    dl_search_and_insert(list_materials, ggrass);
-    dl_search_and_insert(list_objects, checker);
-
     DBG_TRACE(0, "Texture coords: %f %f %f %f",
-	      bgrass->matblk.texorigin[0],
-	      bgrass->matblk.texorigin[1],
-	      bgrass->matblk.texsize[0], bgrass->matblk.texsize[1]);
+	      ggrass->matblk.texorigin[0],
+	      ggrass->matblk.texorigin[1],
+	      ggrass->matblk.texsize[0], ggrass->matblk.texsize[1]);
 
     obj_abs_translate(checker, -32.0f, -32.0f, 0.0f);
     obj_abs_scale(checker, 64.0f, 64.0f, 64.0f);
     obj_abs_rotate(checker, 1.0f, 1.0f, 1.0f, degtorad(0.0f));
 
-    DBG_TRACE(0, "VCount: %d", checker->model->vcount);
-    for (int i = 0; i < checker->model->vcount; i++)
-	DBG_TRACE(0, "V[%d] = %f %f %f %f\n", i,
-		  checker->model->vbuf[i].v[0],
-		  checker->model->vbuf[i].v[1],
-		  checker->model->vbuf[i].v[2], checker->model->vbuf[i].v[3]);
+    dl_search_and_insert(list_models, checker->model);
+    dl_search_and_insert(list_materials, checker->material);
+    dl_search_and_insert(list_objects, checker);
 
-    dl_search_and_insert(list_models, mdl_get_std_model(MODEL_POINT));
     for (int i = 0; i < lights->lightblk.num; i++) {
 	light_obj[i] = obj_create_object("light obj",
 					 mdl_get_std_model(MODEL_POINT),
@@ -598,6 +603,8 @@ void objects_init(void)
 	obj_abs_scale(light_obj[i], 1.0, 1.0, 1.0);
 	obj_abs_rotate(light_obj[i], 1.0f, 1.0f, 1.0f, degtorad(0.0f));
     }
+    dl_search_and_insert(list_models, mdl_get_std_model(MODEL_POINT));
+    dl_search_and_insert(list_materials, mtrl_get_std_material(MATERIAL_WHITE));
 
 }
 
@@ -621,6 +628,7 @@ void main_init(void)
 
     setshaders();
     setvaos();
+
     setuniforms();
     settextures();
 
@@ -654,14 +662,65 @@ void main_draw(void)
 
     glUseProgram(plain_progid);
 
-    obj = cube1;
+    obj = cube;
     model = obj->model;
     glBindBufferRange(GL_UNIFORM_BUFFER, modelblk_bpoint, ubo_model,
 		      obj->modelblk_offset, modelblk_sz);
     material = obj->material;
     glBindBufferRange(GL_UNIFORM_BUFFER, matblk_bpoint, ubo_material,
 		      material->matblk_offset, materialblk_sz);
-    glDrawArrays(model->draw_mode, model->vbo_offset, model->vcount);
+    glMultiDrawArrays(model->draw_mode, model->vbo_start, model->count,
+		      model->num);
+
+    obj = sphere1;
+    model = obj->model;
+    glBindBufferRange(GL_UNIFORM_BUFFER, modelblk_bpoint, ubo_model,
+		      obj->modelblk_offset, modelblk_sz);
+    material = obj->material;
+    glBindBufferRange(GL_UNIFORM_BUFFER, matblk_bpoint, ubo_material,
+		      material->matblk_offset, materialblk_sz);
+    glMultiDrawArrays(model->draw_mode, model->vbo_start, model->count,
+		      model->num);
+
+    obj = sphere2;
+    model = obj->model;
+    glBindBufferRange(GL_UNIFORM_BUFFER, modelblk_bpoint, ubo_model,
+		      obj->modelblk_offset, modelblk_sz);
+    material = obj->material;
+    glBindBufferRange(GL_UNIFORM_BUFFER, matblk_bpoint, ubo_material,
+		      material->matblk_offset, materialblk_sz);
+    glMultiDrawArrays(model->draw_mode, model->vbo_start, model->count,
+		      model->num);
+
+    obj = sphere3;
+    model = obj->model;
+    glBindBufferRange(GL_UNIFORM_BUFFER, modelblk_bpoint, ubo_model,
+		      obj->modelblk_offset, modelblk_sz);
+    material = obj->material;
+    glBindBufferRange(GL_UNIFORM_BUFFER, matblk_bpoint, ubo_material,
+		      material->matblk_offset, materialblk_sz);
+    glMultiDrawArrays(model->draw_mode, model->vbo_start, model->count,
+		      model->num);
+
+    obj = sphere4;
+    model = obj->model;
+    glBindBufferRange(GL_UNIFORM_BUFFER, modelblk_bpoint, ubo_model,
+		      obj->modelblk_offset, modelblk_sz);
+    material = obj->material;
+    glBindBufferRange(GL_UNIFORM_BUFFER, matblk_bpoint, ubo_material,
+		      material->matblk_offset, materialblk_sz);
+    glMultiDrawArrays(model->draw_mode, model->vbo_start, model->count,
+		      model->num);
+
+    obj = sphere5;
+    model = obj->model;
+    glBindBufferRange(GL_UNIFORM_BUFFER, modelblk_bpoint, ubo_model,
+		      obj->modelblk_offset, modelblk_sz);
+    material = obj->material;
+    glBindBufferRange(GL_UNIFORM_BUFFER, matblk_bpoint, ubo_material,
+		      material->matblk_offset, materialblk_sz);
+    glMultiDrawArrays(model->draw_mode, model->vbo_start, model->count,
+		      model->num);
 
     for (int i = 0; i < lights->lightblk.num; i++) {
 	obj = light_obj[i];
@@ -671,37 +730,11 @@ void main_draw(void)
 			  obj->modelblk_offset, modelblk_sz);
 	glBindBufferRange(GL_UNIFORM_BUFFER, matblk_bpoint, ubo_material,
 			  material->matblk_offset, materialblk_sz);
-	glDrawArrays(model->draw_mode, model->vbo_offset, model->vcount);
+	glMultiDrawArrays(model->draw_mode, model->vbo_start, model->count,
+			  model->num);
     }
 
-    obj = cube2;
-    model = obj->model;
-    glBindBufferRange(GL_UNIFORM_BUFFER, modelblk_bpoint, ubo_model,
-		      obj->modelblk_offset, modelblk_sz);
-    material = obj->material;
-    glBindBufferRange(GL_UNIFORM_BUFFER, matblk_bpoint, ubo_material,
-		      material->matblk_offset, materialblk_sz);
-    glDrawArrays(model->draw_mode, model->vbo_offset, model->vcount);
-
-    obj = cube3;
-    model = obj->model;
-    glBindBufferRange(GL_UNIFORM_BUFFER, modelblk_bpoint, ubo_model,
-		      obj->modelblk_offset, modelblk_sz);
-    material = obj->material;
-    glBindBufferRange(GL_UNIFORM_BUFFER, matblk_bpoint, ubo_material,
-		      material->matblk_offset, materialblk_sz);
-    glDrawArrays(model->draw_mode, model->vbo_offset, model->vcount);
-
     glUseProgram(texture_progid);
-
-    obj = cube4;
-    model = obj->model;
-    glBindBufferRange(GL_UNIFORM_BUFFER, modelblk_bpoint, ubo_model,
-		      obj->modelblk_offset, modelblk_sz);
-    material = obj->material;
-    glBindBufferRange(GL_UNIFORM_BUFFER, matblk_bpoint, ubo_material,
-		      material->matblk_offset, materialblk_sz);
-    glDrawArrays(model->draw_mode, model->vbo_offset, model->vcount);
 
     obj = checker;
     model = obj->model;
@@ -710,7 +743,8 @@ void main_draw(void)
     material = obj->material;
     glBindBufferRange(GL_UNIFORM_BUFFER, matblk_bpoint, ubo_material,
 		      material->matblk_offset, materialblk_sz);
-    glDrawArrays(model->draw_mode, model->vbo_offset, model->vcount);
+    glMultiDrawArrays(model->draw_mode, model->vbo_start, model->count,
+		      model->num);
 
     glBindVertexArray(0);
 }
