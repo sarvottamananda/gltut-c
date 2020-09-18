@@ -7,7 +7,7 @@ autotools, libglew, libglfw3, libfreetype2, libpng, libm
 Libtool is mostly needed to show how a small library libcommon.a can be created, though strictly 
 it is not necessary.
 
-TL;DR
+tl;dr
 
 ```
 $ apt-get install autoconf automake libtool libglew-dev libglfw3-dev libfreetype-dev
