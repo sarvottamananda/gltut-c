@@ -28,4 +28,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.1] - 2015-12-31
 
 ### Added
-- Added tut0.c..tut4.c tutorial examples for OpenGL in C
+- Added tut0.c..tut4.c tutorial examples for OpenGL in C (SS)
