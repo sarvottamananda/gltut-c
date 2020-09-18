@@ -3,9 +3,11 @@
 </p>
 
 ***
-[![Pull Requests Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat)](http://makeapullrequest.com)
-[![first-timers-only Friendly](https://img.shields.io/badge/first--timers--only-friendly-blue.svg)](http://www.firsttimersonly.com/)
-[![Build Status](https://travis-ci.org/freeCodeCamp/how-to-contribute-to-open-source.svg?branch=master)](https://travis-ci.org/freeCodeCamp/how-to-contribute-to-open-source)
+<p align="center">
+    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat">
+     <img src="https://img.shields.io/badge/first--timers--only-friendly-blue.svg">
+     <img src="https://travis-ci.org/freeCodeCamp/how-to-contribute-to-open-source.svg?branch=master">
+</p>
 
 
 
@@ -97,16 +99,21 @@ $ ./tut5
 <ul>
 <li>
 
+[ChangeLog](ChangeLog.md)
+</li>
+<li>
+
+[CODE_OF_CONDUCT](CODE_OF_CONDUCT.md)
+</li>
+<li>
+
 [COPYING](COPYING)
 </li>
 <li>
 
 [LICENSE](LICENSE)
 </li>
-<li>
 
-[ChangeLog](ChangeLog.md)
-</li>
 
 
 </ul>
