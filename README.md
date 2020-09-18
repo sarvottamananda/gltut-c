@@ -8,8 +8,7 @@ it is not necessary.
 
 ```
 $ apt-get install autoconf automake libtool libglew-dev libglfw3-dev libfreetype-dev
-$ chmod 777 autogen.sh
-$ ./autogen.sh
+$ bash ./autogen.sh
 $ ./configure
 $ make
 $ cd src
