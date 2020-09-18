@@ -11,12 +11,12 @@ These tutorials are for the batch 2015-2017 of RKMVERI, OpenGL course (written i
 
 ## Installation
 
-=======
 Installation requirements (Debian system aka GNU/Linux, valid at least upto 2016-2020): 
 autotools, libglew, libglfw3, libfreetype2, libpng, libm
 
 Libtool is mostly needed to show how a small library libcommon.a can be created, though strictly 
 it is not necessary.
+
 
 ```
 $ apt-get install autoconf automake libtool libglew-dev libglfw3-dev libfreetype-dev
