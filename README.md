@@ -3,6 +3,13 @@
 </p>
 
 ***
+<p align="center">
+    <img src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat">
+     <img src="https://img.shields.io/badge/first--timers--only-friendly-blue.svg">
+     <img src="https://travis-ci.org/freeCodeCamp/how-to-contribute-to-open-source.svg?branch=master">
+</p>
+
+
 
 # Autoworld
 
@@ -83,3 +90,32 @@ $ ./tut5
 ![Tutorial 5](img/tut5.png)
 
 ***
+
+<details>
+<summary>
+<a class="btnfire small stroke"><em class="fas fa-chevron-circle-down"></em>&nbsp;&nbsp;Frequently Asked Questions</a>    
+</summary>
+
+<ul>
+<li>
+
+[ChangeLog](ChangeLog.md)
+</li>
+<li>
+
+[CODE_OF_CONDUCT](CODE_OF_CONDUCT.md)
+</li>
+<li>
+
+[COPYING](COPYING)
+</li>
+<li>
+
+[LICENSE](LICENSE)
+</li>
+
+
+
+</ul>
+</details>
+
