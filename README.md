@@ -1,5 +1,4 @@
 <p align="center">
-    <img src="img/autoworld_logo.png" width="480"\>
     <img src="img/gltut.png" \>
 </p>
 
