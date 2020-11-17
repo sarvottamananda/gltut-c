@@ -1,5 +1,6 @@
 <p align="center">
     <img src="img/autoworld_logo.png" width="480"\>
+    <img src="img/gltut.png" \>
 </p>
 
 ***
@@ -9,7 +10,7 @@
      <img src="https://travis-ci.org/freeCodeCamp/how-to-contribute-to-open-source.svg?branch=master">
 </p>
 
-![logo](img/gltut.png)
+
 
 
 # Autoworld
