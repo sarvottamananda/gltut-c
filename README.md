@@ -9,6 +9,7 @@
      <img src="https://travis-ci.org/freeCodeCamp/how-to-contribute-to-open-source.svg?branch=master">
 </p>
 
+![logo](img/gltut.png)
 
 
 # Autoworld
