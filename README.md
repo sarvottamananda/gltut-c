@@ -12,7 +12,8 @@
 
 
 
-# Autoworld
+# gltut-C 
+#### OpenGL Tutorials on C
 
 These tutorials are for the batch 2015-2017 of RKMVERI, OpenGL course (written in C). Please read [LICENSE](LICENSE) for more details.
 
