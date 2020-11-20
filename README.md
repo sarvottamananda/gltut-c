@@ -44,7 +44,7 @@ $ cd src
 $ ./tut0
 ```
 
-![Tutorial 0](img/tut0.png)
+![Tutorial 0](https://raw.githubusercontent.com/wiki/sarvottamananda/gltut-c/img/tut0.png)
 
 
 
@@ -54,7 +54,7 @@ $ ./tut0
 $ ./tut1
 ```
 
-![Tutorial 1](img/tut1.png)
+![Tutorial 1](https://raw.githubusercontent.com/wiki/sarvottamananda/gltut-c/img/tut1.png)
 
 
 #### Tutorial 2 - Transformations
@@ -64,7 +64,7 @@ $ ./tut1
 $ ./tut2
 ```
 
-![Tutorial 2](img/tut2.png)
+![Tutorial 2](https://raw.githubusercontent.com/wiki/sarvottamananda/gltut-c/img/tut2.png)
 
 
 #### Tutorial 3 - Textures
@@ -73,7 +73,7 @@ $ ./tut2
 $ ./tut3
 ```
 
-![Tutorial 3](img/tut3.png)
+![Tutorial 3](https://raw.githubusercontent.com/wiki/sarvottamananda/gltut-c/img/tut3.png)
 
 
 #### Tutorial 4 - Lighting on flat surfaces
@@ -82,14 +82,14 @@ $ ./tut3
 $ ./tut4
 ```
 
-![Tutorial 4](img/tut4.png)
+![Tutorial 4](https://raw.githubusercontent.com/wiki/sarvottamananda/gltut-c/img/tut4.png)
 
 #### Tutorial 5 - Lighting on curved surfaces
 
 ```
 $ ./tut5
 ```
-![Tutorial 5](img/tut5.png)
+![Tutorial 5](https://raw.githubusercontent.com/wiki/sarvottamananda/gltut-c/img/tut5.png)
 
 ***
 
@@ -120,4 +120,7 @@ $ ./tut5
 
 </ul>
 </details>
+
+
+
 
