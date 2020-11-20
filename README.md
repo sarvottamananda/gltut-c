@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="img/gltut.png" \>
+    <img src="https://raw.githubusercontent.com/wiki/sarvottamananda/gltut-c/img/gltut.png" \>
 </p>
 
 ***
